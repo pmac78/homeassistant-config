@@ -1,0 +1,367 @@
+- id: hws_predictive_control
+  alias: "HWS - Predictive Solar Control"
+  description: "Smart water heating - plans ahead for heating cycles"
+  mode: restart
+  
+  trigger:
+    # Check every 5 minutes
+    - platform: time_pattern
+      minutes: "/5"
+    
+    # Immediate trigger when conditions are ideal
+    - platform: numeric_state
+      entity_id: sensor.victron_mqtt_system_0_system_dc_battery_soc
+      above: 80
+      for: "00:02:00"
+    
+    # Solar production trigger
+    - platform: numeric_state
+      entity_id: sensor.victron_mqtt_system_0_system_dc_pv_power
+      above: 1200
+      for: "00:02:00"
+  
+  variables:
+    # Current state
+    current_soc: "{{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) }}"
+    current_solar: "{{ states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) }}"
+    current_load: "{{ states('sensor.total_system_consumption_power') | float(0) }}"
+    battery_power: "{{ states('sensor.victron_mqtt_system_0_system_dc_battery_power') | float(0) }}"
+    battery_capacity: "{{ states('input_number.battery_capacity_kwh') | float(10) }}"
+    
+    # Forecasts
+    solar_remaining: "{{ states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) }}"
+    solar_this_hour: "{{ states('sensor.solcast_pv_forecast_forecast_this_hour') | float(0) }}"
+    solar_next_hour: "{{ states('sensor.solcast_pv_forecast_forecast_next_hour') | float(0) }}"
+    
+    # Energy calculations
+    energy_to_full: "{{ (((100 - current_soc) / 100) * battery_capacity) | round(2) }}"
+    heating_energy: 0.75  # 45 mins at 900W
+    buffer: 2.0  # Evening usage safety margin
+    total_energy_needed: "{{ (energy_to_full + heating_energy + buffer) | round(2) }}"
+    
+    # Can we afford a heating cycle?
+    can_afford_heating: "{{ solar_remaining > total_energy_needed }}"
+    energy_headroom: "{{ (solar_remaining - total_energy_needed) | round(2) }}"
+    
+    # Current surplus
+    current_surplus: "{{ current_solar - current_load }}"
+    is_charging: "{{ battery_power > 0 }}"
+    
+    # Heating score
+    heating_score: "{{ states('sensor.hws_heating_score') | int(0) }}"
+    
+    # Time checks
+    is_daytime: >
+      {% set now_hour = now().hour %}
+      {{ now_hour >= 7 and now_hour <= 17 }}
+    
+    hours_until_sunset: >
+      {% set sunset = state_attr('sun.sun', 'next_setting') %}
+      {% if sunset %}
+        {{ ((sunset - now()).total_seconds() / 3600) | round(1) }}
+      {% else %}
+        8
+      {% endif %}
+    
+    # Minimum solar to sustain heating
+    min_solar_for_eco: 900
+  
+  condition:
+    - condition: template
+      value_template: "{{ is_daytime }}"
+    - condition: template
+      value_template: "{{ hours_until_sunset > 2 }}"  # Don't start within 2h of sunset
+  
+  action:
+    - choose:
+        # =============================================
+        # PRIORITY 1: Battery full, solar being wasted
+        # =============================================
+        - conditions:
+            - condition: template
+              value_template: "{{ current_soc > 97 }}"
+            - condition: template
+              value_template: "{{ solar_remaining > 3 }}"
+            - condition: state
+              entity_id: switch.hws
+              state: "off"
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.hws
+        
+        # =============================================
+        # PRIORITY 2: Predictive start - can afford it
+        # =============================================
+        - conditions:
+            - condition: template
+              value_template: "{{ can_afford_heating }}"
+            - condition: template
+              value_template: "{{ energy_headroom > 1 }}"  # At least 1kWh extra
+            - condition: template
+              value_template: "{{ current_soc > 75 }}"  # Battery reasonably charged
+            - condition: template
+              value_template: "{{ current_solar > min_solar_for_eco }}"  # Enough solar NOW
+            - condition: template
+              value_template: "{{ solar_this_hour > 0.8 }}"  # Good forecast this hour
+            - condition: template
+              value_template: "{{ hours_until_sunset > 3 }}"  # Enough time
+            - condition: state
+              entity_id: switch.hws
+              state: "off"
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.hws
+        
+        # =============================================
+        # PRIORITY 3: Traditional surplus-based start
+        # =============================================
+        - conditions:
+            - condition: template
+              value_template: "{{ heating_score >= 60 }}"
+            - condition: template
+              value_template: "{{ current_soc > 85 }}"
+            - condition: template
+              value_template: "{{ current_surplus > 1100 }}"
+            - condition: state
+              entity_id: switch.hws
+              state: "off"
+            - condition: template
+              value_template: "{{ is_charging }}"
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.hws
+        
+        # =============================================
+        # KEEP RUNNING - While conditions are OK
+        # =============================================
+        - conditions:
+            - condition: state
+              entity_id: switch.hws
+              state: "on"
+            - condition: or
+              conditions:
+                # Option A: Good solar production
+                - condition: template
+                  value_template: "{{ current_solar > min_solar_for_eco * 0.8 }}"
+                # Option B: Battery can cover shortfall
+                - condition: template
+                  value_template: "{{ current_soc > 85 and can_afford_heating }}"
+            - condition: template
+              value_template: "{{ current_soc > 70 }}"
+          sequence:
+            - delay: "00:00:01"
+        
+        # =============================================
+        # STOP HEATING
+        # =============================================
+        - conditions:
+            - condition: state
+              entity_id: switch.hws
+              state: "on"
+            - condition: or
+              conditions:
+                # Solar dropped too low
+                - condition: template
+                  value_template: "{{ current_solar < min_solar_for_eco * 0.6 }}"
+                # Battery getting low
+                - condition: template
+                  value_template: "{{ current_soc < 70 }}"
+                # Can no longer afford it
+                - condition: template
+                  value_template: "{{ not can_afford_heating and current_soc < 90 }}"
+                # Too close to sunset
+                - condition: template
+                  value_template: "{{ hours_until_sunset < 1.5 }}"
+          sequence:
+            - service: switch.turn_off
+              target:
+                entity_id: switch.hws
+
+      default: []
+
+# Safety stop at sunset
+- id: hws_sunset_safety
+  alias: "HWS - Sunset Safety Stop"
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-01:30:00"
+  condition:
+    - condition: state
+      entity_id: switch.hws
+      state: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.hws
+
+
+
+
+
+
+
+
+
+
+
+
+- id: water_prediction_update
+  alias: "Water - Update Predictions"
+  description: "Update water autonomy calculations every 5 minutes"
+  mode: single
+  
+  trigger:
+    - platform: time_pattern
+      minutes: "/5"
+  
+  action:
+    - service: homeassistant.update_entity
+      target:
+        entity_id:
+          - sensor.water_days_remaining
+          - sensor.water_usage_rate_24h
+
+
+- id: '1756966157065'
+  alias: Switch 1_1 - Toggle Maglocks
+  description: ''
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - type: toggle
+    device_id: 7603f297b0a3a73e9808648640f06b64
+    entity_id: 249de4b849a8dce4f7194e0a8ae2c741
+    domain: switch
+  mode: single
+- id: '1763275768553'
+  alias: Switch 2_1 -  Toggle Flood Passenger
+  description: ''
+  triggers:
+  - device_id: 353178ba46eeae1368139fda0f53ef9b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - type: toggle
+    device_id: 7603f297b0a3a73e9808648640f06b64
+    entity_id: fc523df94c326a14d1190a719f8def4a
+    domain: switch
+  mode: single
+- id: '1763275814961'
+  alias: Switch 2_2 -  Toggle Flood Rear
+  description: ''
+  triggers:
+  - device_id: 353178ba46eeae1368139fda0f53ef9b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - type: toggle
+    device_id: 7603f297b0a3a73e9808648640f06b64
+    entity_id: 19220a5e8ef32d3361e2ee59bcca7ac5
+    domain: switch
+  mode: single
+- id: '1763275840429'
+  alias: Switch 2_3 - Toggle Flood Drivers
+  description: ''
+  triggers:
+  - device_id: 353178ba46eeae1368139fda0f53ef9b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_3
+    trigger: device
+  conditions: []
+  actions:
+  - type: toggle
+    device_id: 7603f297b0a3a73e9808648640f06b64
+    entity_id: 88b22423ce347dbdddb9f736d9095b71
+    domain: switch
+  mode: single
+- id: '1763276161137'
+  alias: Switch 2_1_Long - All Floods On
+  description: ''
+  triggers:
+  - device_id: 353178ba46eeae1368139fda0f53ef9b
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - parallel:
+    - type: turn_on
+      device_id: 7603f297b0a3a73e9808648640f06b64
+      entity_id: fc523df94c326a14d1190a719f8def4a
+      domain: switch
+    - type: turn_on
+      device_id: 7603f297b0a3a73e9808648640f06b64
+      entity_id: 88b22423ce347dbdddb9f736d9095b71
+      domain: switch
+    - type: turn_on
+      device_id: 7603f297b0a3a73e9808648640f06b64
+      entity_id: 19220a5e8ef32d3361e2ee59bcca7ac5
+      domain: switch
+  mode: single
+- id: '1763552078880'
+  alias: Toggle Dining Light
+  description: ''
+  triggers:
+  - device_id: 6bb5485c6dd4e19593bff840017a3c59
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - type: toggle
+    device_id: 38b2c056d476a5d434543a507635eb7c
+    entity_id: 360ef382d3bea73d815c69750ccf5b2a
+    domain: light
+  mode: single
+- id: '1763552190934'
+  alias: Trigger Nighlight
+  description: ''
+  triggers:
+  - device_id: 6bb5485c6dd4e19593bff840017a3c59
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - action: scene.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: scene.nightlight
+  mode: single
+- id: '1763552509172'
+  alias: Trigger Bright Lights
+  description: ''
+  triggers:
+  - device_id: 6bb5485c6dd4e19593bff840017a3c59
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - action: scene.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: scene.bright_lights
+  mode: single

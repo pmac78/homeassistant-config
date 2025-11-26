@@ -1,0 +1,10 @@
+water_tank_volume:
+  source: sensor.shellyplusuni_a0a3b367223c_voltmeter
+  unique_id: water_tank_volume_litres
+  unit_of_measurement: litres
+  precision: 0
+  lower_limit: true
+  data_points:
+    - [0, 0]
+    - [0.01, 0.11]
+    - [3.91, 20]

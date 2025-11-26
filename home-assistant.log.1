@@ -1,0 +1,1058 @@
+2025-11-17 09:52:57.385 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration victron which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2025-11-17 09:52:57.390 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2025-11-17 09:53:02.907 WARNING (Recorder) [homeassistant.components.recorder.util] The system could not validate that the sqlite3 database at //config/home-assistant_v2.db was shutdown cleanly
+2025-11-17 09:53:02.994 WARNING (Recorder) [homeassistant.components.recorder.util] Ended unfinished session (id=113 from 2025-11-16 08:59:04.664060)
+2025-11-17 09:53:11.665 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 09:53:17.695 WARNING (MainThread) [hass_nabucasa] Could not get subscription info
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/resolver.py", line 117, in resolve
+    resp = await self._resolver.getaddrinfo(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+aiodns.error.DNSError: (11, 'Could not contact DNS servers')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1532, in _create_direct_connection
+    hosts = await self._resolve_host(host, port, traces=traces)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1148, in _resolve_host
+    return await asyncio.shield(resolved_host_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1179, in _resolve_host_with_throttle
+    addrs = await self._resolver.resolve(host, port, family=self._family)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp_asyncmdnsresolver/_impl.py", line 140, in resolve
+    return await super().resolve(host, port, family)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/resolver.py", line 126, in resolve
+    raise OSError(None, msg) from exc
+OSError: [Errno None] Could not contact DNS servers
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/__init__.py", line 501, in _async_get_billing_plan_type
+    subscription = await async_subscription_info(self, True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/cloud_api.py", line 75, in check_token
+    return await func(cloud, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/cloud_api.py", line 329, in async_subscription_info
+    resp = await cloud.websession.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/client.py", line 770, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/client.py", line 725, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        req, traces=traces, timeout=real_timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 642, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1209, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1538, in _create_direct_connection
+    raise ClientConnectorDNSError(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host accounts.nabucasa.com:443 ssl:default [Could not contact DNS servers]
+2025-11-17 09:53:17.737 ERROR (MainThread) [hass_nabucasa] No subscription found
+2025-11-17 09:53:20.954 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  __import__('pkg_resources').declare_namespace(__name__)
+
+2025-11-17 09:53:22.937 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.29.5 is exactly one major version older than the runtime version 6.31.1 at api.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+
+2025-11-17 09:53:22.942 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.29.5 is exactly one major version older than the runtime version 6.31.1 at api_options.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+
+2025-11-17 09:53:26.886 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from GitHub API: Timeout occurred while communicating with GitHub for WLED releases
+2025-11-17 09:53:30.699 WARNING (MainThread) [aioesphomeapi.reconnect_logic] Can't connect to ESPHome API for mb @ 192.168.1.120: Error connecting to [AddrInfo(family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, proto=6, sockaddr=IPv4Sockaddr(address='192.168.1.120', port=6053))]: [Errno 113] Connect call failed ('192.168.1.120', 6053) (SocketAPIError)
+2025-11-17 09:53:37.599 ERROR (MainThread) [homeassistant.components.mqtt.client] Failed to connect to MQTT server due to exception: [Errno -3] Try again
+2025-11-17 09:53:42.525 ERROR (MainThread) [custom_components.hacs] Could not update integration - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [Could not contact DNS servers]
+2025-11-17 09:53:42.527 ERROR (MainThread) [custom_components.hacs] Could not update template - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [Could not contact DNS servers]
+2025-11-17 09:53:42.527 ERROR (MainThread) [custom_components.hacs] Could not update theme - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [Could not contact DNS servers]
+2025-11-17 09:53:42.528 ERROR (MainThread) [custom_components.hacs] Could not update plugin - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [Could not contact DNS servers]
+2025-11-17 09:53:47.616 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 09:56:23.665 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `Litres` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc4/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc4/config', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc4/state', 'device_class': 'current', 'name': 'adc4', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': 'Litres', 'unique_id': 'D83BDAA8A0B4_sensor_adc4'}'
+2025-11-17 09:56:23.674 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `Litres` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc3/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc3/config', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc3/state', 'device_class': 'current', 'name': 'adc3', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': 'Litres', 'unique_id': 'D83BDAA8A0B4_sensor_adc3'}'
+2025-11-17 09:56:23.689 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc2/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc2/config', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc2/state', 'device_class': 'voltage', 'name': 'adc2', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA8A0B4_sensor_adc2'}'
+2025-11-17 09:56:23.702 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc1/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc1/config', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc1/state', 'device_class': 'voltage', 'name': 'adc1', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA8A0B4_sensor_adc1'}'
+2025-11-17 09:56:23.716 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc4/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc4/config', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc4/state', 'device_class': 'current', 'name': 'adc4', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA88474_sensor_adc4'}'
+2025-11-17 09:56:23.732 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc3/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc3/config', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc3/state', 'device_class': 'current', 'name': 'adc3', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA88474_sensor_adc3'}'
+2025-11-17 09:56:23.745 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc2/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc2/config', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc2/state', 'device_class': 'voltage', 'name': 'adc2', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA88474_sensor_adc2'}'
+2025-11-17 09:56:23.758 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc1/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc1/config', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc1/state', 'device_class': 'voltage', 'name': 'adc1', 'value_template': '{{ value | float | round(2) }}', 'unit_of_measurement': '', 'unique_id': 'D83BDAA88474_sensor_adc1'}'
+2025-11-17 09:56:34.201 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 10:55:45.054 ERROR (MainThread) [homeassistant.components.cloud.subscription] A timeout of 10 was reached while trying to fetch subscription information
+2025-11-17 10:58:14.005 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 10:58:14.006 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-17 11:59:27.004 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 12:56:06.929 ERROR (MainThread) [hass_nabucasa.ice_servers] Can't refresh ICE servers: Timeout reached while calling API
+2025-11-17 12:56:56.256 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 12:57:13.308 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 13:01:26.567 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:03:23.065 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:04:02.167 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:06:50.965 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:07:10.643 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:09:19.844 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:09:40.378 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:11:00.004 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:11:57.763 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:12:53.363 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:14:38.402 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:16:23.478 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:19:08.421 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:20:51.180 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:23:34.889 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:26:37.415 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:27:20.453 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:28:37.748 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:30:12.064 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:31:01.227 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 13:31:13.249 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 13:31:36.268 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 13:35:48.458 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:37:37.897 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:40:15.788 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 13:40:37.828 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 13:41:38.695 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:44:22.034 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:49:13.328 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:51:16.741 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 13:52:45.040 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:58:01.191 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 13:58:21.304 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 13:58:42.344 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 14:00:25.093 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:01:12.386 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 14:01:43.003 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 14:01:43.004 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-17 14:04:31.749 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 14:04:38.619 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:06:12.856 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:06:32.827 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:07:58.457 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:08:19.001 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:10:37.097 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:10:56.881 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:12:40.506 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:14:00.697 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 14:14:08.778 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:15:56.537 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:16:16.163 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:17:43.497 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:19:26.457 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:19:46.116 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:20:22.136 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:22:08.616 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:22:29.411 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:27:29.064 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:27:48.693 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:30:42.124 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:31:00.170 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 14:31:18.209 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 14:31:42.644 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:33:44.852 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:34:05.497 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:34:48.539 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:35:46.895 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 14:39:16.194 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:40:35.955 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:40:56.476 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:43:10.637 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 14:43:30.160 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 14:54:29.804 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 14:54:47.850 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 15:02:56.004 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 15:12:30.376 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:12:48.938 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:13:31.972 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:16:16.257 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:16:35.775 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:18:03.617 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:19:48.016 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:24:13.177 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:33:34.780 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:34:17.819 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:34:19.850 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:37:26.044 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:41:32.286 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:45:09.283 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:46:05.683 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:46:26.228 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:48:37.601 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:48:58.219 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 15:55:36.949 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 15:56:17.913 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from GitHub API: Timeout occurred while fetching WLED releases information from GitHub
+2025-11-17 15:56:41.068 ERROR (MainThread) [homeassistant.components.homeassistant_alerts.coordinator] Error requesting homeassistant_alerts data: Cannot connect to host alerts.home-assistant.io:443 ssl:default [DNS server returned general failure]
+2025-11-17 15:59:16.475 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:03:47.477 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:06:48.071 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:12:05.028 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:12:22.622 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:15:14.149 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:16:08.550 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:16:28.538 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:23:26.308 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:26:54.842 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:27:37.883 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:33:14.624 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:34:56.784 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:35:15.876 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:36:45.000 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:38:26.542 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:40:11.581 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:41:07.581 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:44:09.980 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:44:27.512 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:44:57.289 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 16:46:08.367 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:56:26.055 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 16:57:08.217 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:59:33.655 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 16:59:53.216 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:00:36.250 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:01:11.175 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:11:49.650 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:12:10.344 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:13:30.369 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:13:51.018 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:14:34.052 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:15:17.091 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:17:15.952 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:17:33.478 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:20:22.288 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:21:56.609 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:22:44.156 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 17:23:01.173 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 17:23:16.182 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 17:29:27.012 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:30:14.449 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 17:30:29.468 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 17:30:45.478 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 17:40:32.052 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:40:51.689 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:41:34.743 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:42:17.780 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:46:44.296 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:47:01.891 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 17:53:54.322 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:54:52.727 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:57:17.486 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 17:59:42.043 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:00:28.290 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 18:03:21.951 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:03:40.648 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:04:07.083 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 18:05:07.000 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:06:16.002 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 18:06:16.003 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-17 18:06:49.878 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:07:10.522 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:08:34.838 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:18:04.148 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:18:47.186 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:30:24.929 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:30:42.541 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:31:25.578 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:37:38.575 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 18:37:59.154 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:46:25.087 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 18:48:40.885 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:00:27.838 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:02:50.097 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:05:11.359 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:05:30.914 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 19:06:00.007 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 19:06:56.321 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:07:16.008 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 19:07:29.002 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 19:09:23.681 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:09:44.232 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 19:12:00.961 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:12:21.481 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 19:14:47.764 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:31:28.241 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 19:31:38.261 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 19:44:53.591 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:45:13.147 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 19:46:08.311 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:47:03.352 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:49:15.914 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 19:50:30.025 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:52:15.828 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 19:52:35.468 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:05:13.651 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:06:03.929 ERROR (MainThread) [hass_nabucasa.ice_servers] Can't refresh ICE servers: Timeout reached while calling API
+2025-11-17 20:08:42.004 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 20:10:06.707 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:12:10.006 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 20:12:29.043 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 20:14:57.250 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:17:21.654 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:18:10.348 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 20:18:16.694 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:20:01.812 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:21:46.691 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:22:06.462 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:23:30.050 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:25:16.769 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:28:45.334 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:32:42.331 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:34:07.804 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:38:21.243 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:40:06.201 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:41:51.161 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:42:11.753 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:43:33.375 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:45:21.079 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:45:41.594 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:47:06.038 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:52:00.892 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 20:52:41.954 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 20:59:23.313 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 20:59:42.330 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 21:00:00.341 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 21:03:11.148 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:03:31.706 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:04:56.428 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:05:16.980 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:06:40.107 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:09:55.005 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 21:19:32.871 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:20:22.025 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 21:20:36.046 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 21:23:35.213 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:23:52.254 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 21:24:14.295 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 21:24:22.581 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 21:25:17.778 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:25:37.382 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:27:02.736 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:28:47.880 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:30:44.601 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:32:34.174 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 21:33:17.582 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:34:00.626 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:37:38.811 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:39:37.388 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:40:14.489 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:42:57.377 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:46:38.373 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:51:09.844 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:51:29.450 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:52:13.844 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:54:29.844 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 21:54:49.386 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 21:57:03.068 ERROR (MainThread) [homeassistant.components.homeassistant_alerts.coordinator] Error requesting homeassistant_alerts data: Cannot connect to host alerts.home-assistant.io:443 ssl:default [DNS server returned general failure]
+2025-11-17 22:00:20.666 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:00:37.705 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 22:00:59.745 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 22:05:34.001 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:05:52.513 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:06:35.555 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:09:02.805 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:09:22.346 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:09:57.845 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:11:08.002 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 22:11:43.044 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:12:03.558 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:13:29.125 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:13:48.738 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:17:26.323 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:17:45.856 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:18:12.087 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 22:18:34.108 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-17 22:27:27.196 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-17 22:29:30.928 ERROR (MainThread) [hass_nabucasa.ice_servers] Can't refresh ICE servers: Timeout reached while calling API
+2025-11-17 22:30:46.877 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:31:07.344 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:32:34.892 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:32:55.516 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:34:27.274 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:37:09.353 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:42:14.014 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 22:45:27.509 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:47:12.468 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:48:06.788 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:49:02.307 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:55:29.744 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:56:27.024 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 22:58:31.424 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:06:32.277 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:07:05.315 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:07:38.347 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:11:56.868 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:12:07.358 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:12:10.999 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-17 23:15:28.884 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:15:40.429 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:16:13.464 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:16:46.493 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:22:15.184 ERROR (MainThread) [hass_nabucasa.auth] Can't refresh cloud token: 
+2025-11-17 23:25:24.388 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:25:43.884 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:33:39.826 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:33:59.960 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 23:37:34.907 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:39:48.941 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:40:44.061 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:47:59.256 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:50:57.963 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 23:51:16.000 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-17 23:52:24.135 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:52:44.645 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-17 23:54:08.933 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:55:03.973 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-17 23:55:57.013 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:13:23.946 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:13:23.998 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 00:16:15.935 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:28:48.274 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:29:36.507 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 00:29:46.526 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 00:29:57.533 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 00:32:27.672 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:32:47.167 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:35:28.731 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:36:50.047 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:37:09.603 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:39:34.538 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:40:15.624 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:47:11.236 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:50:36.410 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:51:19.446 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:53:54.897 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 00:54:15.432 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 00:55:58.898 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 01:05:48.510 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:09:59.521 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 01:11:44.008 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:13:29.527 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:14:37.002 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 01:15:49.926 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:16:09.508 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:16:39.603 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 01:16:52.544 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:16:53.622 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:17:11.631 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:22:42.158 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 01:22:53.179 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:23:12.189 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:25:01.771 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:25:23.923 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 01:25:43.965 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 01:26:46.492 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:27:07.068 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:30:06.384 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:30:26.877 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:30:52.013 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 01:31:09.036 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:31:09.918 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:31:21.045 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:31:52.954 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:32:04.049 ERROR (MainThread) [hass_nabucasa.remote] Timeout connecting to snitun server
+2025-11-18 01:32:26.059 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:32:37.070 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:33:22.073 ERROR (MainThread) [hass_nabucasa.remote] Timeout connecting to snitun server
+2025-11-18 01:33:44.083 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:34:00.092 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 01:34:59.532 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:39:35.523 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:42:54.663 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:46:05.450 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:47:54.490 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:49:58.879 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 01:58:21.359 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 01:59:08.315 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 02:02:55.227 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 02:03:33.355 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:05:54.873 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:06:14.360 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 02:07:41.112 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:08:01.653 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 02:09:29.110 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:15:50.004 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 02:17:35.426 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:18:29.906 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:20:09.803 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:25:27.928 ERROR (MainThread) [hass_nabucasa.ice_servers] Can't refresh ICE servers: Timeout reached while calling API
+2025-11-18 02:32:37.501 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 02:38:59.399 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 02:39:57.254 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:45:51.091 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:47:25.330 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:50:11.485 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 02:51:05.009 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 02:57:50.045 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:05:59.085 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:07:01.404 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:08:20.970 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:11:46.043 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:13:49.519 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 03:16:23.996 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:20:03.480 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:20:24.051 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:23:24.120 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:23:44.658 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:25:08.600 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:25:28.129 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:30:53.804 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:31:25.548 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 03:31:36.843 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:31:45.566 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 03:32:19.883 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:32:51.316 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:33:48.596 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:36:25.011 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:37:19.793 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:39:04.912 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:40:48.751 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:42:34.109 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 03:42:53.645 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:45:15.847 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:51:53.804 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 03:56:14.022 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:04:42.176 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:13:42.854 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:14:09.139 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 04:15:08.097 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:16:53.056 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:18:07.005 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 04:18:07.005 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-18 04:20:05.215 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:20:53.851 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 04:22:24.784 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:22:42.824 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 04:23:00.864 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 04:23:29.386 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:24:48.735 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:25:10.944 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 04:25:31.985 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 04:29:01.121 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 04:33:31.725 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:38:52.329 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:39:47.130 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:40:07.686 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:41:29.130 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:43:14.408 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:48:54.326 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:52:21.215 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 04:52:42.032 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:53:25.074 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:54:52.099 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 04:57:50.696 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:03:45.294 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:16:05.545 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:16:48.584 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:19:20.013 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 05:23:56.262 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:27:43.843 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:32:08.226 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 05:32:27.802 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:33:07.986 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 05:44:04.951 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:46:14.620 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 05:46:35.159 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:48:04.219 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 05:48:23.766 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:52:13.418 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 05:52:34.019 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:52:59.723 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 05:53:13.744 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 05:53:17.057 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 05:53:32.753 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 06:00:41.553 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:07:56.493 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:10:46.291 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:11:43.969 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:12:39.010 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:12:59.544 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:16:24.007 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 06:16:41.054 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 06:17:06.521 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:19:44.278 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:24:38.553 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 06:24:53.571 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 06:32:40.604 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:32:59.872 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 06:33:17.913 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 06:38:29.839 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:39:18.201 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 06:39:31.219 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 06:39:52.228 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 06:40:10.238 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 06:45:44.755 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:47:16.521 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:47:36.074 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:48:19.114 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:48:50.920 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:55:59.024 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 06:56:18.598 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 06:57:21.069 ERROR (MainThread) [homeassistant.components.homeassistant_alerts.coordinator] Error requesting homeassistant_alerts data: Cannot connect to host alerts.home-assistant.io:443 ssl:default [DNS server returned general failure]
+2025-11-18 07:04:40.673 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:05:35.238 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:07:16.036 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:09:05.235 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:10:00.275 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:10:53.394 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:13:30.514 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:13:51.143 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:15:16.593 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:15:37.205 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:17:18.604 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472409158496] from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Did not receive auth message within 10 seconds
+2025-11-18 07:17:33.929 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472618976160] Peter from 127.0.0.1 (Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 07:19:30.672 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:20:14.920 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 07:20:24.950 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 07:20:25.051 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:21:41.003 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 07:21:41.003 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-18 07:24:47.377 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:25:07.014 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:30:26.746 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:31:09.781 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:33:54.589 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:34:14.223 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:34:42.451 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 07:34:57.262 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:34:57.470 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 07:35:09.480 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 07:35:40.297 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:39:59.039 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:41:54.194 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:52:08.275 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:54:38.675 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:54:59.533 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 07:56:17.636 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:58:02.595 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 07:58:23.251 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:03:57.794 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:04:17.370 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:05:00.421 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:05:43.469 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:06:26.510 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:07:31.381 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [Connection reset by peer]. Retrying in 30 seconds
+2025-11-18 08:15:40.265 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:15:59.803 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:18:03.847 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:18:52.061 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 08:19:09.080 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 08:22:54.004 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 08:27:11.131 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:30:59.513 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:31:48.451 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 08:32:12.469 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 08:36:09.349 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:42:40.705 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:43:00.261 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:50:32.380 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:50:52.917 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 08:51:37.900 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 08:58:33.304 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:00:24.001 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 09:00:45.045 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 09:02:49.712 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from API: Timeout occurred while connecting to WLED device at 192.168.1.52
+2025-11-18 09:04:46.212 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:05:05.742 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:05:31.101 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 09:05:48.780 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:06:31.821 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:07:14.866 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:17:17.930 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:21:10.373 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:21:31.034 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:22:14.076 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:25:16.946 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 09:25:31.895 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:27:15.975 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:28:12.799 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:29:09.416 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:29:29.938 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:38:44.376 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:40:11.141 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:41:06.055 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:41:44.928 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Connection timeout to host https://servicehandlers.nabucasa.com/alexa/access_token. Retrying in 30 seconds
+2025-11-18 09:42:50.376 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:44:39.255 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:47:13.414 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:47:32.959 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:48:16.008 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:48:46.374 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:49:35.443 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 09:49:49.464 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 09:50:09.473 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 09:52:10.626 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:53:57.997 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 09:55:51.195 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:56:45.901 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 09:59:32.140 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:01:39.601 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 10:02:02.642 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 10:02:28.080 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:04:37.166 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:04:57.678 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:10:52.444 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:12:25.804 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:13:57.483 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:14:17.985 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:17:34.955 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:20:41.725 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:24:30.772 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:25:11.003 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 10:25:11.004 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-18 10:25:16.364 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 10:25:36.387 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 10:25:53.398 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 10:32:10.945 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:32:30.542 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:33:59.153 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:35:46.591 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:36:42.994 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:38:28.110 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:38:48.699 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 10:43:55.868 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:45:41.467 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:47:26.426 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:48:22.666 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 10:59:14.501 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:03:24.498 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:04:24.017 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:07:39.102 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 11:17:30.675 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:18:12.969 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:23:41.526 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:24:02.369 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:30:11.050 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:32:25.905 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:34:10.483 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:34:30.125 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:35:13.162 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:35:56.204 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:41:36.485 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:48:27.045 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:53:04.094 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:58:24.643 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 11:58:44.252 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 11:59:27.167 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:06:51.582 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:07:30.639 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:08:29.116 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:10:36.650 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:12:01.432 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:12:20.492 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:13:43.591 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:14:38.631 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:14:59.472 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:19:16.654 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:19:56.866 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:23:46.807 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:29:22.206 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:31:54.459 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:34:50.138 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:35:09.796 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:36:57.334 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:38:20.296 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:40:07.494 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:42:05.711 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:42:46.933 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:44:10.655 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:46:37.946 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 12:46:43.010 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:47:03.538 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:47:32.774 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 12:47:46.580 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 12:47:54.799 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 12:50:24.680 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 12:50:43.225 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:01:08.762 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:02:52.602 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:03:50.972 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:05:27.559 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:05:47.095 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:10:15.028 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:10:58.069 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:20:32.672 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:20:53.309 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:21:36.347 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:24:49.901 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:30:02.448 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:30:41.386 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:32:30.986 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:34:16.585 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:34:36.286 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:36:01.384 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:40:30.921 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:40:50.517 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:41:33.559 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:42:03.861 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:45:24.034 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:45:43.522 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:47:08.499 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:48:52.395 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:49:09.958 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:50:38.579 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:53:03.300 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:54:48.261 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:55:07.835 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 13:56:33.221 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 13:59:59.541 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:04:34.115 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:10:01.548 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:10:22.125 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:10:54.027 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 14:11:05.159 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:11:15.046 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 14:14:11.618 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:18:49.696 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:27:29.896 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:34:35.850 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:34:56.459 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:36:19.996 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:38:07.609 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:40:05.894 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:40:48.168 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:48:58.645 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:52:29.094 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 14:52:48.707 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:53:31.746 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 14:58:32.319 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:00:17.277 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:00:37.940 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:02:06.716 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:06:35.671 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:12:48.068 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:13:25.105 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:13:28.227 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:13:30.607 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:16:55.585 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:17:09.139 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:17:46.179 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:18:19.215 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:18:53.839 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:18:57.870 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:25:03.740 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:25:24.358 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:30:43.240 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:34:38.122 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:35:48.614 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:36:09.349 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:36:52.389 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:42:03.702 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:49:46.216 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:51:36.286 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:51:51.406 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:51:56.443 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:52:17.477 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:52:40.912 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:53:13.961 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:53:46.996 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 15:54:18.765 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:56:14.006 ERROR (MainThread) [custom_components.hacs] Could not update theme - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:56:14.007 ERROR (MainThread) [custom_components.hacs] Could not update template - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:56:14.008 ERROR (MainThread) [custom_components.hacs] Could not update integration - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:56:14.009 ERROR (MainThread) [custom_components.hacs] Could not update plugin - Error fetching data from HACS: Cannot connect to host data-v2.hacs.xyz:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:57:23.998 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from GitHub API: Timeout occurred while communicating with GitHub for WLED releases
+2025-11-18 15:57:41.065 ERROR (MainThread) [homeassistant.components.homeassistant_alerts.coordinator] Error requesting homeassistant_alerts data: Cannot connect to host alerts.home-assistant.io:443 ssl:default [DNS server returned general failure]
+2025-11-18 15:59:01.642 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 15:59:11.202 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:00:41.081 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:03:15.720 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:04:53.639 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:05:03.152 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:10:15.077 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:10:28.670 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:12:11.832 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:12:18.863 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:12:33.897 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:12:52.930 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:13:30.965 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:14:53.398 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:15:26.431 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:17:45.287 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:22:10.184 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from API: Timeout occurred while connecting to WLED device at 192.168.1.52
+2025-11-18 16:23:20.271 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:23:24.715 ERROR (MainThread) [aiohttp.server] Error handling request from 192.168.1.127
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/web_protocol.py", line 510, in _handle_request
+    resp = await request_handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/web_app.py", line 569, in _handle
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/web_middlewares.py", line 117, in impl
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/security_filter.py", line 92, in security_filter_middleware
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/forwarded.py", line 83, in forwarded_middleware
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/request_context.py", line 26, in request_context_middleware
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/ban.py", line 86, in ban_middleware
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/auth.py", line 242, in auth_middleware
+    return await handler(request)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/headers.py", line 41, in headers_middleware
+    response = await handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/helpers/http.py", line 73, in handle
+    result = await handler(request, **request.match_info)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/http/data_validator.py", line 74, in wrapper
+    return await method(view, request, data, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/mobile_app/http_api.py", line 73, in post
+    data[CONF_CLOUDHOOK_URL] = await async_create_cloud_hook(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        hass, webhook_id, None
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/src/homeassistant/homeassistant/components/mobile_app/util.py", line 71, in async_create_cloud_hook
+    hook = await cloud.async_get_or_create_cloudhook(hass, webhook_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/components/cloud/__init__.py", line 195, in async_get_or_create_cloudhook
+    raise CloudNotConnected
+homeassistant.components.cloud.CloudNotConnected
+2025-11-18 16:23:59.824 WARNING (MainThread) [homeassistant.components.http.ban] Login attempt or request with invalid authentication from 192.168.1.127 (192.168.1.127). Requested URL: '/auth/login_flow/63569a7b6c27ea0f7f24ab7dadb6fa12'. (Mozilla/5.0 (Linux; Android 16; Pixel 9 Pro XL Build/BP3A.251005.004.B3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/141.0.7390.122 Mobile Safari/537.36 Home Assistant/2025.11.3-18924 (Android 16; Pixel 9 Pro XL))
+2025-11-18 16:28:22.789 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from API: Timeout occurred while connecting to WLED device at 192.168.1.52
+2025-11-18 16:28:35.932 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 16:31:34.827 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:31:54.997 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 16:31:54.998 ERROR (MainThread) [homeassistant.components.met.coordinator] Error fetching met data: Update failed: 
+2025-11-18 16:32:54.335 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:33:29.372 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:42:02.928 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Connection error
+2025-11-18 16:42:09.963 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:42:19.997 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:42:44.037 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 16:48:30.941 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 16:52:35.934 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 16:53:54.905 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:55:33.648 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from API: Error occurred while communicating with WLED device at 192.168.1.52
+2025-11-18 16:55:40.928 ERROR (MainThread) [homeassistant.components.wled] Error fetching wled data: Invalid response from API: Error occurred while communicating with WLED device at 192.168.1.51
+2025-11-18 16:55:47.933 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 16:55:57.933 ERROR (MainThread) [homeassistant.components.wled] No PONG received after 15.0 seconds
+2025-11-18 16:57:38.343 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 16:58:58.985 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 16:59:46.558 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 16:59:59.579 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 17:00:23.587 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 17:00:35.599 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 17:00:59.609 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 17:04:45.622 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:06:07.548 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:08:40.959 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:09:23.993 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:11:41.773 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472394078592] from 127.0.0.1 (Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Did not receive auth message within 10 seconds
+2025-11-18 17:11:56.931 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472411475680] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:14:51.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472411054976] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:14:59.298 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:15:19.921 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:16:02.963 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:16:46.000 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:21:49.851 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:23:40.218 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:24:18.330 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:27:51.682 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:28:09.727 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 17:28:27.784 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 17:28:57.224 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:29:21.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472409733376] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:31:10.005 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:34:26.344 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 17:35:08.643 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:36:13.682 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 17:39:12.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472408909312] Peter from 127.0.0.1 (Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:40:40.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472401596128] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:42:12.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472401588448] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:45:00.931 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472401599008] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:47:51.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472383170528] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:50:49.931 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472438161536] Peter from 127.0.0.1 (Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:55:12.930 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472394254496] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:57:00.054 ERROR (MainThread) [homeassistant.components.cloud.subscription] A timeout of 10 was reached while trying to fetch subscription information
+2025-11-18 17:59:19.958 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 17:59:40.995 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 17:59:41.931 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [281472409290368] Peter from 127.0.0.1 (Mozilla/5.0 (Linux; Android 13; uis7870sc_2h10 Build/TP1A.220624.014; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0.6478.71 Mobile Safari/537.36 Home Assistant/2025.8.7-17352 (Android 13; uis7870sc_2h10)): Disconnected: Received error message during command phase: No PONG received after 27.5 seconds
+2025-11-18 17:59:48.315 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 18:00:10.325 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 18:00:25.334 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 18:03:41.024 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:06:02.876 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:06:22.572 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:07:27.501 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:10:15.965 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:14:29.097 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:16:24.060 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:17:07.100 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:23:01.777 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:23:44.814 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:28:41.101 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:30:30.782 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:30:50.383 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:32:17.343 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:32:36.774 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:33:59.184 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:37:25.904 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:37:45.407 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:50:13.653 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 18:51:42.862 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:53:27.901 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:56:23.994 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 18:56:42.033 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 18:57:46.779 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:59:30.778 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 18:59:51.272 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:01:15.818 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:02:59.096 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:03:18.625 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:04:42.375 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:05:02.900 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:05:45.941 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:09:49.342 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:10:54.451 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:11:13.952 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:16:01.089 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:16:21.559 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:16:48.439 ERROR (MainThread) [snitun.multiplexer.core] Timeout error while pinging peer
+2025-11-18 19:17:00.460 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 19:17:04.599 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:17:14.470 ERROR (MainThread) [hass_nabucasa.remote] Connection problem to snitun server (Can't connect to SniTun server ap-southeast-1-3.ui.nabu.casa:443 with: [Errno -3] Try again)
+2025-11-18 19:17:47.634 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds
+2025-11-18 19:22:14.724 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:25:58.162 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:26:15.207 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:26:17.362 ERROR (MainThread) [homeassistant.components.cloud.subscription] A timeout of 10 was reached while trying to fetch subscription information
+2025-11-18 19:27:01.109 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.an_penta_plus_playlist: unavailable
+2025-11-18 19:27:01.109 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.an_penta_plus_preset: unavailable
+2025-11-18 19:27:01.109 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.wled_playlist_2: unavailable
+2025-11-18 19:27:01.110 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.wled_preset_2: unavailable
+2025-11-18 19:27:03.489 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.an_penta_plus_playlist: unavailable
+2025-11-18 19:27:03.490 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.an_penta_plus_preset: unavailable
+2025-11-18 19:27:03.490 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.wled_playlist_2: unavailable
+2025-11-18 19:27:03.490 WARNING (MainThread) [homeassistant.components.select.reproduce_state] Invalid state specified for select.wled_preset_2: unavailable
+2025-11-18 19:27:18.194 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:29:00.611 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:36:11.528 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:36:27.574 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:36:44.616 WARNING (MainThread) [hass_nabucasa.iot] Unable to connect: Cannot connect to host cloud.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:37:48.085 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:39:32.029 WARNING (MainThread) [hass_nabucasa.iot] Connection closed: Cannot write to closing transport
+2025-11-18 19:39:51.548 WARNING (MainThread) [homeassistant.components.cloud] Unable to activate Alexa Report State: Cannot connect to host servicehandlers.nabucasa.com:443 ssl:default [DNS server returned general failure]. Retrying in 30 seconds

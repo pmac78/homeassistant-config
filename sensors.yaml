@@ -1,0 +1,402 @@
+##############################################################
+# SENSORS CONFIGURATION
+# Integration, derivative, filter, and statistics sensors
+##############################################################
+
+# ==========================================================
+# BATTERY ENERGY TRACKING (CHARGED / DISCHARGED)
+# Integrates battery power over time to get energy (kWh)
+# Uses the split charge/discharge power from templates.yaml
+# ==========================================================
+- platform: integration
+  source: sensor.victron_battery_power_charged_w
+  name: "Victron Battery Energy Charged kWh"
+  unique_id: victron_battery_energy_charged
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.victron_battery_power_discharged_w
+  name: "Victron Battery Energy Discharged kWh"
+  unique_id: victron_battery_energy_discharged
+  unit_prefix: k
+  round: 3
+  method: left
+
+# ==========================================================
+# WATER TANK LEVEL SMOOTHING - FAST RESPONSE
+# Uses short moving average to catch quick events
+# Balance between noise rejection and responsiveness
+# ==========================================================
+- platform: filter
+  name: "Tank 1 Level Smoothed"
+  unique_id: tank_1_level_smoothed
+  entity_id: sensor.f16_adc3
+  filters:
+    - filter: outlier
+      window_size: 3
+      radius: 2.0
+    - filter: time_simple_moving_average
+      window_size: "00:00:30"
+      precision: 1
+
+- platform: filter
+  name: "Tank 2 Level Smoothed"
+  unique_id: tank_2_level_smoothed
+  entity_id: sensor.f16_adc4
+  filters:
+    - filter: outlier
+      window_size: 3
+      radius: 2.0
+    - filter: time_simple_moving_average
+      window_size: "00:00:30"
+      precision: 1
+
+# ==========================================================
+# WATER TANK RATE - FAST RESPONSE (L/min)
+# Uses 1-minute window to catch short usage events
+# ==========================================================
+- platform: derivative
+  source: sensor.water_tanks_total
+  name: "Water Tanks Level Rate L/min"
+  unit_time: min
+  time_window: "00:01:00"
+  round: 2
+
+# ==========================================================
+# WATER TANK VOLUME TRACKING
+# Only integrates when actual flow is detected
+# ==========================================================
+- platform: integration
+  source: sensor.water_tanks_fill_rate_filtered
+  name: "Water Tanks Filled Volume"
+  unique_id: water_tanks_filled_volume
+  round: 1
+  method: trapezoidal
+
+- platform: integration
+  source: sensor.water_tanks_usage_rate_filtered
+  name: "Water Tanks Used Volume"
+  unique_id: water_tanks_used_volume
+  round: 1
+  method: trapezoidal
+# ==========================================================
+# DC CONSUMPTION ENERGY (kWh) - DC LOADS ONLY
+# Integrates DC consumption power to get total energy used
+# NOTE: This is DC loads only, does NOT include inverter
+# Kept for backwards compatibility and specific DC monitoring
+# ==========================================================
+- platform: integration
+  source: sensor.victron_dc_consumption_power
+  name: "Victron DC Consumption Energy"
+  unique_id: victron_dc_consumption_energy
+  unit_prefix: k
+  round: 3
+  method: trapezoidal
+
+# ==========================================================
+# TOTAL SYSTEM CONSUMPTION ENERGY (kWh) - DC + INVERTER
+# This is the MAIN consumption sensor for predictions
+# Integrates total system consumption (DC loads + inverter)
+# ==========================================================
+- platform: integration
+  source: sensor.total_system_consumption_power
+  name: "Total System Consumption Energy"
+  unique_id: total_system_consumption_energy
+  unit_prefix: k
+  round: 3
+  method: trapezoidal
+
+# ==========================================================
+# WATER TANK RATE & CUMULATIVE VOLUMES
+# Tracks how fast tanks fill/empty and total volume moved
+# ==========================================================
+- platform: derivative
+  source: sensor.water_tanks_total
+  name: "Water Tanks Level Rate"
+  unit_time: h
+  time_window: "00:05:00"
+  round: 3
+
+- platform: integration
+  source: sensor.water_tanks_fill_rate
+  name: "Water Tanks Filled Volume"
+  unique_id: water_tanks_filled_volume
+  round: 1
+  method: trapezoidal
+
+- platform: integration
+  source: sensor.water_tanks_usage_rate
+  name: "Water Tanks Used Volume"
+  unique_id: water_tanks_used_volume
+  round: 1
+  method: trapezoidal
+
+# ==========================================================
+# SOLAR ENERGY INTEGRATION (kWh)
+# Converts solar power (W) to energy (kWh) over time
+# This feeds into the utility_meter for daily tracking
+# ==========================================================
+- platform: integration
+  source: sensor.victron_mqtt_system_0_system_dc_pv_power
+  name: "Solar Energy kWh"
+  unique_id: solar_energy_kwh
+  unit_prefix: k
+  round: 3
+  method: trapezoidal
+  unit_time: h
+
+# ==========================================================
+# 7-DAY AVERAGE TOTAL ENERGY USAGE
+# Calculates mean daily TOTAL consumption (DC + Inverter) over past week
+# Used for battery autonomy and prediction calculations
+# UPDATED: Now uses total system consumption instead of DC only
+# ==========================================================
+- platform: statistics
+  name: "Total Energy Daily Usage Avg (7d)"
+  unique_id: total_energy_daily_usage_avg_7d
+  entity_id: sensor.total_system_consumption_energy
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 100
+
+# ==========================================================
+# TOTAL ENERGY USAGE LAST HOUR (kWh)
+# Tracks the change in cumulative TOTAL energy over 1 hour
+# Used to populate the 24-hour load profile buckets
+# UPDATED: Now uses total system consumption instead of DC only
+# ==========================================================
+- platform: statistics
+  name: "Total Energy Usage Last Hour"
+  unique_id: total_energy_usage_last_hour
+  entity_id: sensor.total_system_consumption_energy
+  state_characteristic: change
+  max_age:
+    hours: 1
+  sampling_size: 200
+
+# ==========================================================
+# 24-HOUR LOAD PROFILE - 7-DAY MEAN PER HOUR
+# Creates statistical averages for each hour of the day
+# Enables accurate time-of-day load predictions
+# Each sensor calculates mean kWh used during that hour
+# over the past 7 days
+# UPDATED: Now uses TOTAL consumption (DC + Inverter)
+# ==========================================================
+- platform: statistics
+  name: "Total Usage Hour 00 Mean"
+  unique_id: total_usage_hour_00_mean
+  entity_id: sensor.total_usage_hour_00_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 01 Mean"
+  unique_id: total_usage_hour_01_mean
+  entity_id: sensor.total_usage_hour_01_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 02 Mean"
+  unique_id: total_usage_hour_02_mean
+  entity_id: sensor.total_usage_hour_02_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 03 Mean"
+  unique_id: total_usage_hour_03_mean
+  entity_id: sensor.total_usage_hour_03_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 04 Mean"
+  unique_id: total_usage_hour_04_mean
+  entity_id: sensor.total_usage_hour_04_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 05 Mean"
+  unique_id: total_usage_hour_05_mean
+  entity_id: sensor.total_usage_hour_05_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 06 Mean"
+  unique_id: total_usage_hour_06_mean
+  entity_id: sensor.total_usage_hour_06_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 07 Mean"
+  unique_id: total_usage_hour_07_mean
+  entity_id: sensor.total_usage_hour_07_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 08 Mean"
+  unique_id: total_usage_hour_08_mean
+  entity_id: sensor.total_usage_hour_08_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 09 Mean"
+  unique_id: total_usage_hour_09_mean
+  entity_id: sensor.total_usage_hour_09_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 10 Mean"
+  unique_id: total_usage_hour_10_mean
+  entity_id: sensor.total_usage_hour_10_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 11 Mean"
+  unique_id: total_usage_hour_11_mean
+  entity_id: sensor.total_usage_hour_11_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 12 Mean"
+  unique_id: total_usage_hour_12_mean
+  entity_id: sensor.total_usage_hour_12_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 13 Mean"
+  unique_id: total_usage_hour_13_mean
+  entity_id: sensor.total_usage_hour_13_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 14 Mean"
+  unique_id: total_usage_hour_14_mean
+  entity_id: sensor.total_usage_hour_14_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 15 Mean"
+  unique_id: total_usage_hour_15_mean
+  entity_id: sensor.total_usage_hour_15_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 16 Mean"
+  unique_id: total_usage_hour_16_mean
+  entity_id: sensor.total_usage_hour_16_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 17 Mean"
+  unique_id: total_usage_hour_17_mean
+  entity_id: sensor.total_usage_hour_17_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 18 Mean"
+  unique_id: total_usage_hour_18_mean
+  entity_id: sensor.total_usage_hour_18_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 19 Mean"
+  unique_id: total_usage_hour_19_mean
+  entity_id: sensor.total_usage_hour_19_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 20 Mean"
+  unique_id: total_usage_hour_20_mean
+  entity_id: sensor.total_usage_hour_20_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 21 Mean"
+  unique_id: total_usage_hour_21_mean
+  entity_id: sensor.total_usage_hour_21_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 22 Mean"
+  unique_id: total_usage_hour_22_mean
+  entity_id: sensor.total_usage_hour_22_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500
+
+- platform: statistics
+  name: "Total Usage Hour 23 Mean"
+  unique_id: total_usage_hour_23_mean
+  entity_id: sensor.total_usage_hour_23_raw
+  state_characteristic: mean
+  max_age:
+    days: 7
+  sampling_size: 500

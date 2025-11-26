@@ -1,0 +1,12 @@
+# ==========================================================
+# BATTERY CAPACITY HELPER (kWh)
+# Used by all prediction/autonomy sensors
+# ==========================================================
+battery_capacity_kwh:
+  name: Battery Capacity (kWh)
+  min: 0
+  max: 50
+  step: 0.1
+  unit_of_measurement: kWh
+  mode: box
+  initial: 15.2      # 👈 Your usable battery capacity (kWh)

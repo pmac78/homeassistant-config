@@ -1,0 +1,21 @@
+{
+  "domain": "smartvanio",
+  "name": "SmartVan.io",
+  "after_dependencies": ["zeroconf", "tag"],
+  "codeowners": ["@jameslouiz"],
+  "config_flow": true,
+  "dependencies": ["esphome"],
+  "dhcp": [
+    {
+      "registered_devices": true
+    }
+  ],
+  "documentation": "https://smartvan.io/blogs/guides",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "loggers": ["aioesphomeapi", "noiseprotocol", "bleak_esphome"],
+  "mqtt": ["smartvanio/discover/#"],
+  "requirements": ["scipy>=1.10.1", "aioesphomeapi==29.0.0"],
+  "zeroconf": ["_smartvaniolib._tcp.local."],
+  "version": "1.0.5"
+}

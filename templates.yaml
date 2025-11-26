@@ -1,0 +1,1503 @@
+##############################################################
+# TEMPLATE SENSORS & BINARY SENSORS
+# Custom calculated sensors using Jinja2 templates
+##############################################################
+
+# ==========================================================
+# SENSOR TEMPLATES
+# ==========================================================
+- sensor:
+
+    # ======================================================
+    # TOTAL AC POWER (Shelly Pro 4PMs)
+    # Sums power from all 8 AC circuits monitored by 2x Shelly Pro 4PM
+    # NOTE: This only monitors specific circuits, not total AC load
+    # See VEBus inverter output for true total AC consumption
+    # ======================================================
+    - name: "Total AC Power"
+      unique_id: total_ac_power_shelly
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      state: >
+        {{
+          (states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0)) +
+          (states('sensor.shellypro4pm_6825ddd5de40_switch_1_power') | float(0)) +
+          (states('sensor.shellypro4pm_6825ddd5de40_switch_2_power') | float(0)) +
+          (states('sensor.shellypro4pm_6825ddd5de40_switch_3_power') | float(0)) +
+          (states('sensor.shellypro4pm_8813bff257a4_switch_0_power') | float(0)) +
+          (states('sensor.shellypro4pm_8813bff257a4_switch_1_power') | float(0)) +
+          (states('sensor.shellypro4pm_8813bff257a4_switch_2_power') | float(0)) +
+          (states('sensor.shellypro4pm_8813bff257a4_switch_3_power') | float(0))
+        }}
+
+    # ======================================================
+    # VICTRON DC CONSUMPTION POWER (POSITIVE)
+    # GX system reports DC consumption as negative, convert to positive
+    # This is DC loads only, does NOT include inverter supplying AC
+    # ======================================================
+    - name: "Victron DC Consumption Power"
+      unique_id: victron_dc_consumption_power
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      state: >
+        {% set p = states('sensor.victron_mqtt_system_0_system_dc_consumption') | float(0) %}
+        {{ p | abs }}
+
+    # ======================================================
+    # TOTAL SYSTEM CONSUMPTION (DC + INVERTER)
+    # GX System DC Consumption doesn't include inverter load
+    # This adds DC loads + inverter DC input for true total consumption
+    # This is what battery predictions should use
+    # ======================================================
+    - name: "Total System Consumption Power"
+      unique_id: total_system_consumption_power
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      state: >
+        {% set dc_loads = states('sensor.victron_dc_consumption_power') | float(0) %}
+        {% set inverter_dc = states('sensor.victron_mqtt_vebus_276_vebus_inverter_dc_power') | float(0) %}
+        {{ dc_loads + (inverter_dc | abs) }}
+
+    # ======================================================
+    # BATTERY POWER - SPLIT CHARGE / DISCHARGE
+    # Separates battery power into positive charge and discharge values
+    # Battery power is negative when discharging, positive when charging
+    # ======================================================
+    - name: "Victron Battery Power Charged W"
+      unique_id: victron_battery_power_charged_w
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      state: >
+        {% set p = states('sensor.victron_mqtt_system_0_system_dc_battery_power') | float(0) %}
+        {{ p if p > 0 else 0 }}
+
+    - name: "Victron Battery Power Discharged W"
+      unique_id: victron_battery_power_discharged_w
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      state: >
+        {% set p = states('sensor.victron_mqtt_system_0_system_dc_battery_power') | float(0) %}
+        {{ (p * -1) if p < 0 else 0 }}
+
+    # ======================================================
+    # WATER TANKS - FAST RESPONSE FOR SHORT EVENTS
+    # ======================================================
+    
+    # Total water in both tanks (litres)
+    - name: "Water Tanks Total"
+      unique_id: water_tanks_total
+      unit_of_measurement: "L"
+      device_class: volume
+      state_class: measurement
+      state: >
+        {{
+          (states('sensor.tank_1_level_smoothed') | float(0)) +
+          (states('sensor.tank_2_level_smoothed') | float(0))
+        }}
+
+    # Fill rate - filtered for integration (2 L/min threshold)
+    - name: "Water Tanks Fill Rate Filtered"
+      unique_id: water_tanks_fill_rate_filtered
+      unit_of_measurement: "L/min"
+      state_class: measurement
+      state: >
+        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
+        {% set threshold = 2.0 %}
+        {% if r > threshold %}
+          {{ r }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Fill rate - display version
+    - name: "Water Tanks Fill Rate"
+      unique_id: water_tanks_fill_rate
+      unit_of_measurement: "L/min"
+      state_class: measurement
+      state: >
+        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
+        {% set threshold = 2.0 %}
+        {% if r > threshold %}
+          {{ r }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Usage rate - filtered for integration (2 L/min threshold)
+    - name: "Water Tanks Usage Rate Filtered"
+      unique_id: water_tanks_usage_rate_filtered
+      unit_of_measurement: "L/min"
+      state_class: measurement
+      state: >
+        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
+        {% set threshold = 2.0 %}
+        {% if r < -threshold %}
+          {{ (r * -1) }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Usage rate - display version
+    - name: "Water Tanks Usage Rate"
+      unique_id: water_tanks_usage_rate
+      unit_of_measurement: "L/min"
+      state_class: measurement
+      state: >
+        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
+        {% set threshold = 2.0 %}
+        {% if r < -threshold %}
+          {{ (r * -1) }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Cumulative water filled (passes through integration sensor)
+    - name: "Water Tanks Filled"
+      unique_id: water_tanks_filled
+      unit_of_measurement: "L"
+      device_class: water
+      state_class: total_increasing
+      state: "{{ states('sensor.water_tanks_filled_volume') }}"
+
+    # Cumulative water used (passes through integration sensor)
+    - name: "Water Tanks Used"
+      unique_id: water_tanks_used
+      unit_of_measurement: "L"
+      device_class: water
+      state_class: total_increasing
+      state: "{{ states('sensor.water_tanks_used_volume') }}"
+    # ======================================================
+    # SOLAR PRODUCTION
+    # ======================================================
+    
+    # Solar production today from utility meter (kWh)
+    - name: "Solar Production Today (kWh)"
+      unique_id: solar_production_today_kwh
+      unit_of_measurement: "kWh"
+      device_class: energy
+      state_class: total
+      state: "{{ states('sensor.solar_production_today') }}"
+
+    # Remaining solar forecast for today (from Solcast)
+    - name: "Energy Production Today Remaining"
+      unique_id: energy_production_today_remaining
+      unit_of_measurement: "kWh"
+      device_class: energy
+      state_class: measurement
+      state: "{{ states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) }}"
+
+    # ======================================================
+    # BATTERY PREDICTIONS - SIMPLE METHOD
+    # Uses 7-day average daily consumption (now includes inverter load)
+    # ======================================================
+    
+    # Predicted battery SoC at end of day
+    - name: "Battery Predicted End-of-Day SoC"
+      unique_id: battery_predicted_eod_soc
+      unit_of_measurement: "%"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set solar_rem = states('sensor.energy_production_today_remaining') | float(0) %}
+        {% set used_today = states('sensor.total_system_consumption_energy') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+
+        {% set battery_now = (soc / 100.0) * capacity %}
+        {% set usage_remaining = avg_daily - used_today %}
+        {% set usage_remaining = [usage_remaining, 0] | max %}
+        {% set predicted_end = battery_now + solar_rem - usage_remaining %}
+
+        {% if capacity > 0 %}
+          {% set predicted_soc = (predicted_end / capacity) * 100 %}
+          {{ [ [predicted_soc, 0] | max, 100 ] | min | round(1) }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Battery autonomy using 7-day average load
+    - name: "Battery Autonomy (Avg Load)"
+      unique_id: battery_autonomy_avg_load
+      unit_of_measurement: "h"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+        {% set battery_now = (soc / 100.0) * capacity %}
+
+        {% if avg_daily > 0 %}
+          {% set avg_power_kw = avg_daily / 24 %}
+          {{ (battery_now / avg_power_kw) | round(1) }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Battery autonomy using current load (includes inverter)
+    - name: "Battery Autonomy (Current Load)"
+      unique_id: battery_autonomy_current_load
+      unit_of_measurement: "h"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set p_w = states('sensor.total_system_consumption_power') | float(0) %}
+        {% set battery_now = (soc / 100.0) * capacity %}
+
+        {% if p_w <= 0 %}
+          0
+        {% else %}
+          {% set load_kw = p_w / 1000 %}
+          {{ (battery_now / load_kw) | round(1) }}
+        {% endif %}
+
+    # ======================================================
+    # BATTERY PREDICTIONS - FORECAST METHOD
+    # Uses Solcast hourly forecast data
+    # ======================================================
+    
+    # Hours until battery is full (using forecast)
+    - name: "Battery Hours to Full (Forecast)"
+      unique_id: battery_hours_to_full_forecast
+      unit_of_measurement: "h"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+        {% set forecast = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+
+        {% if capacity <= 0 or forecast is none %}
+          0
+        {% elif soc >= 99.5 %}
+          0
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
+          {% set ns = namespace(battery=battery_now, hours_to_full=None) %}
+
+          {% for point in forecast %}
+            {% set t = as_datetime(point['period_start']) %}
+            {% if t > now() %}
+              {% set pv_kwh = point['pv_estimate'] | float(0) %}
+              {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
+              {% if ns.battery < 0 %}
+                {% set ns.battery = 0 %}
+              {% endif %}
+              {% if ns.battery >= capacity and ns.hours_to_full is none %}
+                {% set ns.hours_to_full = (as_timestamp(t) - as_timestamp(now())) / 3600 %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% if ns.hours_to_full is none %}
+            0
+          {% else %}
+            {% set h = ns.hours_to_full %}
+            {{ [h, 0] | max | round(1) }}
+          {% endif %}
+        {% endif %}
+
+    # Timestamp when battery will be full (using forecast)
+    - name: "Battery Full Time (Forecast)"
+      unique_id: battery_full_time_forecast
+      device_class: timestamp
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+        {% set forecast = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+
+        {% if capacity <= 0 or forecast is none or soc >= 99.5 %}
+          {{ none }}
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
+          {% set ns = namespace(battery=battery_now, full_time=None) %}
+
+          {% for point in forecast %}
+            {% set t = as_datetime(point['period_start']) %}
+            {% if t > now() %}
+              {% set pv_kwh = point['pv_estimate'] | float(0) %}
+              {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
+              {% if ns.battery < 0 %}
+                {% set ns.battery = 0 %}
+              {% endif %}
+              {% if ns.battery >= capacity and ns.full_time is none %}
+                {% set ns.full_time = t %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% if ns.full_time is none %}
+            {{ none }}
+          {% else %}
+            {{ ns.full_time }}
+          {% endif %}
+        {% endif %}
+
+    # ======================================================
+    # BATTERY FULL BY SUNSET/AFTERNOON - IMPROVED PREDICTIONS
+    # More useful than "full by midnight" - checks before solar drops
+    # ======================================================
+    
+    # Will battery be full before sunset?
+    - name: "Battery Full by Sunset (Forecast)"
+      unique_id: battery_full_by_sunset_forecast
+      icon: mdi:battery-charging-100
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+        {% set forecast = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+        {% set sunset = as_datetime(state_attr('sun.sun', 'next_setting')) %}
+        
+        {% if capacity <= 0 or forecast is none or sunset is none %}
+          unknown
+        {% elif soc >= 99.5 %}
+          Full Now
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
+          {% set ns = namespace(battery=battery_now, full_time=None) %}
+          
+          {% for point in forecast %}
+            {% set t = as_datetime(point['period_start']) %}
+            {% if t > now() and t < sunset %}
+              {% set pv_kwh = point['pv_estimate'] | float(0) %}
+              {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
+              {% if ns.battery < 0 %}
+                {% set ns.battery = 0 %}
+              {% endif %}
+              {% if ns.battery >= capacity and ns.full_time is none %}
+                {% set ns.full_time = t %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          
+          {% if ns.full_time is none %}
+            No
+          {% else %}
+            Yes ({{ ns.full_time.strftime('%-I:%M %p') }})
+          {% endif %}
+        {% endif %}
+
+    # Will battery be full by 4 PM (before evening loads)?
+    - name: "Battery Full by Afternoon (Profiled)"
+      unique_id: battery_full_by_afternoon_profiled
+      icon: mdi:battery-clock
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set solar_rem = states('sensor.energy_production_today_remaining') | float(0) %}
+        
+        {% if capacity <= 0 %}
+          unknown
+        {% elif soc >= 99.5 %}
+          Full Now
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set now_ts = now() %}
+          {% set h_now = now_ts.hour %}
+          {% set min_now = now_ts.minute | float(0) %}
+          
+          {# Target time: 4 PM (16:00) #}
+          {% set target_hour = 16 %}
+          
+          {# If it's already past 4 PM, check if we're full now #}
+          {% if h_now >= target_hour %}
+            {% if soc >= 95 %}
+              Yes (Now)
+            {% else %}
+              No (Past Target)
+            {% endif %}
+          {% else %}
+            {# Calculate hours until 4 PM #}
+            {% set hours_to_target = (target_hour - h_now) - (min_now / 60) %}
+            
+            {% macro hour_bucket_mean(h) -%}
+              {% set entity_id = 'sensor.total_usage_hour_%02d_mean' % h %}
+              {{ states(entity_id) | float(0) }}
+            {%- endmacro %}
+            
+            {# Calculate remaining part of current hour #}
+            {% set frac_first = (60 - min_now) / 60 if min_now < 60 else 0 %}
+            {% set frac_first = [frac_first, hours_to_target] | min %}
+            {% set frac_first = [frac_first, 0] | max %}
+            
+            {# Blend current hour bucket with instantaneous power #}
+            {% set bucket_now = hour_bucket_mean(h_now) %}
+            {% set p_now_kw = (states('sensor.total_system_consumption_power') | float(0)) / 1000 %}
+            {% if bucket_now > 0 and p_now_kw > 0 %}
+              {% set bucket_now = (bucket_now * 0.5) + (p_now_kw * 0.5) %}
+            {% elif p_now_kw > 0 %}
+              {% set bucket_now = p_now_kw %}
+            {% endif %}
+            
+            {% set ns = namespace(e_used = 0.0) %}
+            
+            {# 1) Remaining part of current hour #}
+            {% if frac_first > 0 %}
+              {% set ns.e_used = ns.e_used + bucket_now * frac_first %}
+            {% endif %}
+            
+            {# 2) Full hours until target #}
+            {% set remaining = hours_to_target - frac_first %}
+            {% if remaining > 0 %}
+              {% set full_hours = remaining | int %}
+              {% for i in range(full_hours) %}
+                {% set h = (h_now + 1 + i) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h) %}
+              {% endfor %}
+              
+              {# 3) Partial last hour #}
+              {% set frac_last = remaining - full_hours %}
+              {% if frac_last > 0 %}
+                {% set h_last = (h_now + 1 + full_hours) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h_last) * frac_last %}
+              {% endif %}
+            {% endif %}
+            
+            {% set predicted = battery_now + solar_rem - ns.e_used %}
+            {% set margin = 0.2 %}
+            
+            {% if predicted >= (capacity - margin) %}
+              Yes (by 4 PM)
+            {% else %}
+              No ({{ ((predicted / capacity) * 100) | round(0) }}% expected)
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+    # ======================================================
+    # 24-HOUR LOAD PROFILE - RAW HOURLY BUCKETS
+    # Each sensor captures TOTAL consumption (DC + Inverter) only during its specific hour
+    # These feed into the statistics sensors in sensors.yaml
+    # ======================================================
+
+    - name: "Total Usage Hour 00 Raw"
+      unique_id: total_usage_hour_00_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 0 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 01 Raw"
+      unique_id: total_usage_hour_01_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 1 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 02 Raw"
+      unique_id: total_usage_hour_02_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 2 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 03 Raw"
+      unique_id: total_usage_hour_03_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 3 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 04 Raw"
+      unique_id: total_usage_hour_04_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 4 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 05 Raw"
+      unique_id: total_usage_hour_05_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 5 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 06 Raw"
+      unique_id: total_usage_hour_06_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 6 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 07 Raw"
+      unique_id: total_usage_hour_07_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 7 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 08 Raw"
+      unique_id: total_usage_hour_08_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 8 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 09 Raw"
+      unique_id: total_usage_hour_09_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 9 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 10 Raw"
+      unique_id: total_usage_hour_10_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 10 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 11 Raw"
+      unique_id: total_usage_hour_11_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 11 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 12 Raw"
+      unique_id: total_usage_hour_12_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 12 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 13 Raw"
+      unique_id: total_usage_hour_13_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 13 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 14 Raw"
+      unique_id: total_usage_hour_14_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 14 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 15 Raw"
+      unique_id: total_usage_hour_15_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 15 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 16 Raw"
+      unique_id: total_usage_hour_16_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 16 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 17 Raw"
+      unique_id: total_usage_hour_17_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 17 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 18 Raw"
+      unique_id: total_usage_hour_18_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 18 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 19 Raw"
+      unique_id: total_usage_hour_19_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 19 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 20 Raw"
+      unique_id: total_usage_hour_20_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 20 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 21 Raw"
+      unique_id: total_usage_hour_21_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 21 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 22 Raw"
+      unique_id: total_usage_hour_22_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 22 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    - name: "Total Usage Hour 23 Raw"
+      unique_id: total_usage_hour_23_raw
+      unit_of_measurement: "kWh"
+      state_class: measurement
+      state: >
+        {% if now().hour == 23 %}
+          {{ states('sensor.total_energy_usage_last_hour') | float(0) }}
+        {% else %}
+          unknown
+        {% endif %}
+
+    # ======================================================
+    # BATTERY SOC AT SUNRISE (PROFILED)
+    # Uses 24-hour load profile to predict SoC at sunrise
+    # Blends historical hourly averages with current load
+    # ======================================================
+    - name: "Battery SoC at Sunrise (Profiled)"
+      unique_id: battery_soc_at_sunrise_profiled
+      unit_of_measurement: "%"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set battery_now = (soc / 100.0) * capacity %}
+        {% set sunrise = as_datetime(state_attr('sun.sun', 'next_rising')) %}
+        {% if capacity <= 0 or sunrise is none %}
+          0
+        {% else %}
+          {% set now_ts = now() %}
+          {% set hours_total = (as_timestamp(sunrise) - as_timestamp(now_ts)) / 3600 %}
+          {% if hours_total <= 0 %}
+            {{ soc | round(1) }}
+          {% else %}
+            {% set h_now = now_ts.hour %}
+            {% set min_now = now_ts.minute | float(0) %}
+            {% set frac_first = (60 - min_now) / 60 if min_now < 60 else 0 %}
+            {% set frac_first = [frac_first, hours_total] | min %}
+            {% set frac_first = [frac_first, 0] | max %}
+
+            {# Helper macro: 7-day mean bucket for a given hour #}
+            {% macro hour_bucket_mean(h) -%}
+              {% set entity_id = 'sensor.total_usage_hour_%02d_mean' % h %}
+              {{ states(entity_id) | float(0) }}
+            {%- endmacro %}
+
+            {# Blend current hour bucket with instantaneous power #}
+            {% set bucket_now = hour_bucket_mean(h_now) %}
+            {% set p_now_kw = (states('sensor.total_system_consumption_power') | float(0)) / 1000 %}
+            {% if bucket_now > 0 and p_now_kw > 0 %}
+              {% set bucket_now = (bucket_now * 0.5) + (p_now_kw * 0.5) %}
+            {% elif p_now_kw > 0 %}
+              {% set bucket_now = p_now_kw %}
+            {% endif %}
+
+            {% set ns = namespace(e_used = 0.0) %}
+
+            {# 1) Remaining part of current hour #}
+            {% if frac_first > 0 %}
+              {% set ns.e_used = ns.e_used + bucket_now * frac_first %}
+            {% endif %}
+
+            {# 2) Full hours after current hour up to sunrise #}
+            {% set remaining = hours_total - frac_first %}
+            {% if remaining > 0 %}
+              {% set full_hours = remaining | int %}
+              {% for i in range(full_hours) %}
+                {% set h = (h_now + 1 + i) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h) %}
+              {% endfor %}
+
+              {# 3) Partial last hour before sunrise, if any #}
+              {% set frac_last = remaining - full_hours %}
+              {% if frac_last > 0 %}
+                {% set h_last = (h_now + 1 + full_hours) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h_last) * frac_last %}
+              {% endif %}
+            {% endif %}
+
+            {% set predicted = battery_now - ns.e_used %}
+            {% set soc_pred = (predicted / capacity) * 100 %}
+            {{ [ [soc_pred, 0] | max, 100 ] | min | round(1) }}
+          {% endif %}
+        {% endif %}
+
+    # ======================================================
+    # BATTERY PREDICTED END-OF-DAY SOC (PROFILED)
+    # Uses 24-hour load profile + remaining solar forecast
+    # More accurate than simple daily average method
+    # ======================================================
+    - name: "Battery Predicted End-of-Day SoC (Profiled)"
+      unique_id: battery_predicted_eod_soc_profiled
+      unit_of_measurement: "%"
+      state_class: measurement
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set solar_rem = states('sensor.energy_production_today_remaining') | float(0) %}
+        {% if capacity <= 0 %}
+          0
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set now_ts = now() %}
+          {% set h_now = now_ts.hour %}
+          {% set min_now = now_ts.minute | float(0) %}
+          {% set hours_to_midnight = (24 - h_now) - (min_now / 60) %}
+          {% if hours_to_midnight <= 0 %}
+            {{ soc | round(1) }}
+          {% else %}
+
+            {% macro hour_bucket_mean(h) -%}
+              {% set entity_id = 'sensor.total_usage_hour_%02d_mean' % h %}
+              {{ states(entity_id) | float(0) }}
+            {%- endmacro %}
+
+            {% set frac_first = (60 - min_now) / 60 if min_now < 60 else 0 %}
+            {% set frac_first = [frac_first, hours_to_midnight] | min %}
+            {% set frac_first = [frac_first, 0] | max %}
+
+            {# Blend current hour bucket with instantaneous power #}
+            {% set bucket_now = hour_bucket_mean(h_now) %}
+            {% set p_now_kw = (states('sensor.total_system_consumption_power') | float(0)) / 1000 %}
+            {% if bucket_now > 0 and p_now_kw > 0 %}
+              {% set bucket_now = (bucket_now * 0.5) + (p_now_kw * 0.5) %}
+            {% elif p_now_kw > 0 %}
+              {% set bucket_now = p_now_kw %}
+            {% endif %}
+
+            {% set ns = namespace(e_used = 0.0) %}
+
+            {# 1) Remaining part of current hour #}
+            {% if frac_first > 0 %}
+              {% set ns.e_used = ns.e_used + bucket_now * frac_first %}
+            {% endif %}
+
+            {# 2) Full hours to midnight after current hour #}
+            {% set remaining = hours_to_midnight - frac_first %}
+            {% if remaining > 0 %}
+              {% set full_hours = remaining | int %}
+              {% for i in range(full_hours) %}
+                {% set h = (h_now + 1 + i) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h) %}
+              {% endfor %}
+
+              {# 3) Partial last hour to midnight, if fractional #}
+              {% set frac_last = remaining - full_hours %}
+              {% if frac_last > 0 %}
+                {% set h_last = (h_now + 1 + full_hours) % 24 %}
+                {% set ns.e_used = ns.e_used + hour_bucket_mean(h_last) * frac_last %}
+              {% endif %}
+            {% endif %}
+
+            {% set predicted_end = battery_now + solar_rem - ns.e_used %}
+            {% set predicted_soc = (predicted_end / capacity) * 100 %}
+            {{ [ [predicted_soc, 0] | max, 100 ] | min | round(1) }}
+          {% endif %}
+        {% endif %}
+
+# ============================================================
+# ADD TO templates.yaml - in the "- sensor:" section
+# Paste this with your other template sensors
+# ============================================================
+
+    # ======================================================
+    # HWS HEATING SCORE
+    # Calculates optimal heating score based on multiple factors
+    # Score: 0-100+ (higher = better time to heat water)
+    # ======================================================
+    - name: "HWS Heating Score"
+      unique_id: hws_heating_score
+      unit_of_measurement: "points"
+      state_class: measurement
+      icon: mdi:water-boiler
+      state: >
+        {% set score = 0 %}
+        
+        {# Get current values #}
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set solar = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+        {% set battery_power = states('sensor.victron_mqtt_system_0_system_dc_battery_power') | float(0) %}
+        {% set predicted = states('sensor.battery_predicted_end_of_day_soc_profiled') | float(0) %}
+        {% set remaining = states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) %}
+        {% set next_hour = states('sensor.solcast_pv_forecast_forecast_next_hour') | float(0) %}
+        {% set will_full = is_state('binary_sensor.battery_will_be_full_before_sunset', 'on') %}
+        
+        {# High battery SoC = good (up to 50 points) #}
+        {% if soc > 95 %}
+          {% set score = score + 50 %}
+        {% elif soc > 90 %}
+          {% set score = score + 40 %}
+        {% elif soc > 85 %}
+          {% set score = score + 30 %}
+        {% elif soc > 80 %}
+          {% set score = score + 15 %}
+        {% endif %}
+        
+        {# Good current solar = good (up to 30 points) #}
+        {% if solar > 2500 %}
+          {% set score = score + 30 %}
+        {% elif solar > 2000 %}
+          {% set score = score + 25 %}
+        {% elif solar > 1500 %}
+          {% set score = score + 20 %}
+        {% elif solar > 1200 %}
+          {% set score = score + 10 %}
+        {% endif %}
+        
+        {# Battery will be full today = excellent (20 points) #}
+        {% if will_full %}
+          {% set score = score + 20 %}
+        {% endif %}
+        
+        {# High predicted end-of-day = safe (up to 20 points) #}
+        {% if predicted > 95 %}
+          {% set score = score + 20 %}
+        {% elif predicted > 90 %}
+          {% set score = score + 15 %}
+        {% elif predicted > 85 %}
+          {% set score = score + 10 %}
+        {% elif predicted > 80 %}
+          {% set score = score + 5 %}
+        {% endif %}
+        
+        {# Good solar remaining = opportunity (up to 15 points) #}
+        {% if remaining > 8 %}
+          {% set score = score + 15 %}
+        {% elif remaining > 5 %}
+          {% set score = score + 10 %}
+        {% elif remaining > 3 %}
+          {% set score = score + 5 %}
+        {% endif %}
+        
+        {# Strong solar next hour = good timing (up to 10 points) #}
+        {% if next_hour > 1500 %}
+          {% set score = score + 10 %}
+        {% elif next_hour > 1000 %}
+          {% set score = score + 5 %}
+        {% endif %}
+        
+        {# Battery actively charging = safe (10 points) #}
+        {% if battery_power > 50 %}
+          {% set score = score + 10 %}
+        {% endif %}
+        
+        {{ score }}
+      attributes:
+        recommendation: >
+          {% set score = states('sensor.hws_heating_score') | int(0) %}
+          {% if score >= 100 %}
+            BOOST mode (1800W)
+          {% elif score >= 60 %}
+            ECO mode (900W)
+          {% elif score >= 40 %}
+            Marginal - Monitor
+          {% else %}
+            Not recommended
+          {% endif %}
+        battery_soc: "{{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') }}%"
+        solar_current: "{{ states('sensor.victron_mqtt_system_0_system_dc_pv_power') }}W"
+        solar_remaining: "{{ states('sensor.solcast_pv_forecast_forecast_remaining_today') }}kWh"
+        predicted_eod: "{{ states('sensor.battery_predicted_end_of_day_soc_profiled') }}%"
+        will_be_full: "{{ is_state('binary_sensor.battery_will_be_full_before_sunset', 'on') }}"
+
+    # ======================================================
+    # HWS STATUS SUMMARY
+    # Human-readable status of heating system
+    # ======================================================
+    - name: "HWS Status"
+      unique_id: hws_status
+      icon: mdi:information-outline
+      state: >
+        {% if is_state('switch.hws', 'on') %}
+          Heating
+        {% else %}
+          Standby
+        {% endif %}
+      attributes:
+        status_detail: >
+          {% set score = states('sensor.hws_heating_score') | int(0) %}
+          {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+          {% set solar = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+          {% set load = states('sensor.total_system_consumption_power') | float(0) %}
+          {% set surplus = solar - load %}
+          
+          {% if is_state('switch.hws', 'on') %}
+            🔥 Currently heating water
+            Surplus available: {{ surplus | round(0) }}W
+          {% elif score >= 100 %}
+            ✅ Excellent conditions for BOOST
+          {% elif score >= 60 %}
+            ✅ Good conditions for ECO
+          {% elif score >= 40 %}
+            ⚠️ Marginal conditions
+          {% else %}
+            ❌ Conditions not suitable
+          {% endif %}
+        conditions: >
+          Battery: {{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') }}%
+          Solar: {{ states('sensor.victron_mqtt_system_0_system_dc_pv_power') }}W
+          Predicted EOD: {{ states('sensor.battery_predicted_end_of_day_soc_profiled') }}%
+          Score: {{ states('sensor.hws_heating_score') }}/100
+
+    # ======================================================
+    # HWS AVAILABLE SURPLUS POWER
+    # Shows how much power is available for heating
+    # ======================================================
+    - name: "HWS Available Surplus"
+      unique_id: hws_available_surplus
+      unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
+      icon: mdi:flash
+      state: >
+        {% set solar = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+        {% set load = states('sensor.total_system_consumption_power') | float(0) %}
+        {% set surplus = solar - load %}
+        {{ [surplus, 0] | max | round(0) }}
+      attributes:
+        can_run_eco: >
+          {% set surplus = states('sensor.hws_available_surplus') | float(0) %}
+          {{ surplus > 1100 }}
+        can_run_boost: >
+          {% set surplus = states('sensor.hws_available_surplus') | float(0) %}
+          {{ surplus > 2000 }}
+        mode_recommendation: >
+          {% set surplus = states('sensor.hws_available_surplus') | float(0) %}
+          {% if surplus > 2000 %}
+            BOOST (1800W) possible
+          {% elif surplus > 1100 %}
+            ECO (900W) possible
+          {% elif surplus > 0 %}
+            Insufficient for heating
+          {% else %}
+            No surplus (using battery)
+          {% endif %}
+
+    # ======================================================
+    # HWS DETECTED MODE
+    # Automatically detects which mode heater is running in
+    # based on actual power consumption
+    # ======================================================
+    - name: "HWS Detected Mode"
+      unique_id: hws_detected_mode
+      icon: mdi:water-boiler
+      state: >
+        {% if is_state('switch.hws', 'off') %}
+          Off
+        {% else %}
+          {# Adjust entity_id to match your HWS Shelly switch power sensor #}
+          {% set p = states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0) %}
+          {% if p > 1500 %}
+            BOOST ({{ p | round(0) }}W)
+          {% elif p > 700 %}
+            ECO ({{ p | round(0) }}W)
+          {% elif p > 100 %}
+            Standby ({{ p | round(0) }}W)
+          {% else %}
+            Off
+          {% endif %}
+        {% endif %}
+      attributes:
+        power_draw: >
+          {{ states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0) | round(0) }}W
+        efficiency: >
+          {% set p = states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0) %}
+          {% set solar = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+          {% if p > 100 and solar > 0 %}
+            {{ ((p / solar) * 100) | round(0) }}% of solar
+          {% else %}
+            N/A
+          {% endif %}
+
+    # ======================================================
+    # HWS ENERGY TODAY
+    # Tracks total energy used by heater today
+    # ======================================================
+    - name: "HWS Energy Today"
+      unique_id: hws_energy_today
+      unit_of_measurement: "kWh"
+      device_class: energy
+      state_class: total_increasing
+      icon: mdi:lightning-bolt
+      state: >
+        {# Adjust entity_id to match your HWS Shelly switch energy sensor #}
+        {{ states('sensor.shellypro4pm_6825ddd5de40_switch_0_energy') | float(0) }}
+      attributes:
+        cost_saved: >
+          {% set kwh = states('sensor.shellypro4pm_6825ddd5de40_switch_0_energy') | float(0) %}
+          {% set rate = 0.30 %}  {# Adjust to your electricity rate #}
+          ${{ (kwh * rate) | round(2) }} saved using solar
+        runtime_hours: >
+          {% set kwh = states('sensor.shellypro4pm_6825ddd5de40_switch_0_energy') | float(0) %}
+          {% set p = states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0) %}
+          {% if p > 700 %}
+            {% set avg_power = 1.2 %}  {# Assume average between ECO and BOOST #}
+            {{ (kwh / avg_power) | round(1) }}h
+          {% else %}
+            N/A
+          {% endif %}
+
+    # ======================================================
+    # HWS RECOMMENDATION
+    # Human-readable recommendation for heating
+    # ======================================================
+    - name: "HWS Recommendation"
+      unique_id: hws_recommendation
+      icon: mdi:lightbulb-on
+      state: >
+        {% set score = states('sensor.hws_heating_score') | int(0) %}
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set surplus = states('sensor.hws_available_surplus') | float(0) %}
+        {% set is_on = is_state('switch.hws', 'on') %}
+        
+        {% if is_on %}
+          Currently Heating ✓
+        {% elif score >= 100 and surplus > 2000 %}
+          Excellent for BOOST mode
+        {% elif score >= 80 and surplus > 1100 %}
+          Good for ECO mode
+        {% elif score >= 60 %}
+          OK for ECO mode
+        {% elif score >= 40 %}
+          Marginal conditions
+        {% else %}
+          Not recommended
+        {% endif %}
+      attributes:
+        detail: >
+          Score: {{ states('sensor.hws_heating_score') }}/100
+          Battery: {{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') }}%
+          Surplus: {{ states('sensor.hws_available_surplus') }}W
+          Predicted EOD: {{ states('sensor.battery_predicted_end_of_day_soc_profiled') }}%
+        next_action: >
+          {% set score = states('sensor.hws_heating_score') | int(0) %}
+          {% set is_on = is_state('switch.hws', 'on') %}
+          {% if is_on %}
+            System will stop if conditions deteriorate
+          {% elif score >= 60 %}
+            Will auto-start when conditions optimal
+          {% else %}
+            Waiting for better solar/battery conditions
+          {% endif %}
+
+    # ======================================================
+    # HWS SESSION TIME
+    # Tracks how long current heating session has been running
+    # ======================================================
+    - name: "HWS Session Duration"
+      unique_id: hws_session_duration
+      icon: mdi:timer
+      state: >
+        {% if is_state('switch.hws', 'on') %}
+          {% set start = states.switch.hws.last_changed %}
+          {% set duration = (as_timestamp(now()) - as_timestamp(start)) / 60 %}
+          {{ duration | round(0) }} minutes
+        {% else %}
+          Not running
+        {% endif %}
+      attributes:
+        started_at: >
+          {% if is_state('switch.hws', 'on') %}
+            {{ states.switch.hws.last_changed.strftime('%-I:%M %p') }}
+          {% else %}
+            N/A
+          {% endif %}
+        energy_this_session: >
+          {# This is approximate - could integrate power if you want precise #}
+          {% if is_state('switch.hws', 'on') %}
+            {% set duration_h = (as_timestamp(now()) - as_timestamp(states.switch.hws.last_changed)) / 3600 %}
+            {% set p = states('sensor.shellypro4pm_6825ddd5de40_switch_0_power') | float(0) %}
+            {% set kwh = (p / 1000) * duration_h %}
+            {{ kwh | round(2) }}kWh
+          {% else %}
+            0kWh
+          {% endif %}
+
+##############################################################
+# HWS PREDICTIVE SENSORS
+# Add these to your templates.yaml under the "- sensor:" section
+##############################################################
+
+    # Can we afford a 45-min heating cycle?
+    - name: "HWS Can Afford Heating"
+      unique_id: hws_can_afford_heating
+      icon: mdi:calculator-variant
+      state: >
+        {% set solar_remaining = states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) %}
+        {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set battery_capacity = states('input_number.battery_capacity_kwh') | float(10) %}
+        
+        {# Energy needed to fill battery from current SoC #}
+        {% set energy_to_full = ((100 - current_soc) / 100) * battery_capacity %}
+        
+        {# Energy for 45-min heating cycle (ECO mode @ 900W) #}
+        {% set heating_energy = 0.75 %}
+        
+        {# Buffer for evening usage #}
+        {% set buffer = 2.0 %}
+        
+        {# Total energy needed #}
+        {% set total_needed = energy_to_full + heating_energy + buffer %}
+        
+        {{ 'Yes' if solar_remaining > total_needed else 'No' }}
+      attributes:
+        solar_remaining_kwh: "{{ states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) | round(2) }}"
+        energy_to_full_kwh: >
+          {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+          {% set battery_capacity = states('input_number.battery_capacity_kwh') | float(10) %}
+          {{ (((100 - current_soc) / 100) * battery_capacity) | round(2) }}
+        heating_cycle_kwh: 0.75
+        evening_buffer_kwh: 2.0
+        total_needed_kwh: >
+          {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+          {% set battery_capacity = states('input_number.battery_capacity_kwh') | float(10) %}
+          {% set energy_to_full = ((100 - current_soc) / 100) * battery_capacity %}
+          {{ (energy_to_full + 0.75 + 2.0) | round(2) }}
+        headroom_kwh: >
+          {% set solar_remaining = states('sensor.solcast_pv_forecast_forecast_remaining_today') | float(0) %}
+          {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+          {% set battery_capacity = states('input_number.battery_capacity_kwh') | float(10) %}
+          {% set energy_to_full = ((100 - current_soc) / 100) * battery_capacity %}
+          {% set total_needed = energy_to_full + 0.75 + 2.0 %}
+          {{ (solar_remaining - total_needed) | round(2) }}
+
+    # Optimal time to start heating
+    - name: "HWS Optimal Start Window"
+      unique_id: hws_optimal_start_window
+      icon: mdi:clock-check
+      state: >
+        {% set can_afford = states('sensor.hws_can_afford_heating') %}
+        {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set solar_now = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+        {% set hour = now().hour %}
+        
+        {% if can_afford == 'Yes' and current_soc > 75 and solar_now > 800 and hour < 16 %}
+          Now
+        {% elif can_afford == 'Yes' and current_soc > 85 %}
+          Soon
+        {% elif can_afford == 'Yes' %}
+          Later
+        {% else %}
+          Not Today
+        {% endif %}
+      attributes:
+        reason: >
+          {% set can_afford = states('sensor.hws_can_afford_heating') %}
+          {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+          {% set solar_now = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+          {% set headroom = state_attr('sensor.hws_can_afford_heating', 'headroom_kwh') | float(0) %}
+          {% set hour = now().hour %}
+          
+          {% if can_afford != 'Yes' %}
+            Not enough solar forecast (need {{ state_attr('sensor.hws_can_afford_heating', 'total_needed_kwh') }}kWh, have {{ state_attr('sensor.hws_can_afford_heating', 'solar_remaining_kwh') }}kWh)
+          {% elif solar_now < 800 %}
+            Waiting for solar to increase (currently {{ solar_now | round(0) }}W, need 800W+)
+          {% elif current_soc < 75 %}
+            Waiting for battery to charge (currently {{ current_soc | round(0) }}%, need 75%+)
+          {% elif hour >= 16 %}
+            Too late in day, wait for tomorrow
+          {% else %}
+            Good conditions! {{ headroom }}kWh headroom available
+          {% endif %}
+
+    # Updated recommendation sensor
+    - name: "HWS Recommendation"
+      unique_id: hws_recommendation_v2
+      icon: mdi:lightbulb-on
+      state: >
+        {% set can_afford = states('sensor.hws_can_afford_heating') %}
+        {% set optimal = states('sensor.hws_optimal_start_window') %}
+        {% set current_soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set solar_now = states('sensor.victron_mqtt_system_0_system_dc_pv_power') | float(0) %}
+        {% set hws_on = is_state('switch.hws', 'on') %}
+        {% set headroom = state_attr('sensor.hws_can_afford_heating', 'headroom_kwh') | float(0) %}
+        
+        {% if hws_on %}
+          Heating ({{ solar_now | round(0) }}W solar)
+        {% elif optimal == 'Now' %}
+          Start now ({{ headroom }}kWh spare)
+        {% elif optimal == 'Soon' %}
+          Ready soon
+        {% elif can_afford == 'Yes' %}
+          Later today
+        {% else %}
+          Skip today
+        {% endif %}
+
+# ============================================================
+# WATER MANAGEMENT DASHBOARD
+# Complete water system monitoring and hot water control
+# ============================================================
+
+# PART 1: First add these sensors to templates.yaml
+# ============================================================
+
+    # ======================================================
+    # WATER AUTONOMY - DAYS REMAINING
+    # Predicts how many days of water left based on usage
+    # Updated every 5 minutes
+    # ======================================================
+    - name: "Water Days Remaining"
+      unique_id: water_days_remaining
+      unit_of_measurement: "days"
+      icon: mdi:calendar-clock
+      state: >
+        {% set total_water = states('sensor.water_tanks_total') | float(0) %}
+        {% set usage_24h = states('sensor.water_tanks_used_volume') | float(0) %}
+        
+        {# Get usage from 24 hours ago #}
+        {% set usage_24h_ago = state_attr('sensor.water_tanks_used_volume', 'last_reset') %}
+        
+        {# Simple calculation: current usage rate extrapolated #}
+        {% if usage_24h > 0 %}
+          {% set days_left = total_water / usage_24h %}
+          {{ [days_left, 0] | max | round(1) }}
+        {% else %}
+          999
+        {% endif %}
+      attributes:
+        usage_today: "{{ states('sensor.water_tanks_used_volume') | float(0) | round(1) }}L"
+        total_capacity: "400L"
+        current_level: "{{ states('sensor.water_tanks_total') | float(0) | round(0) }}L"
+        percentage: "{{ ((states('sensor.water_tanks_total') | float(0) / 400) * 100) | round(0) }}%"
+        warning_level: >
+          {% set days = states('sensor.water_days_remaining') | float(999) %}
+          {% if days < 1 %}
+            🔴 CRITICAL - Refill immediately!
+          {% elif days < 2 %}
+            🟠 LOW - Plan refill soon
+          {% elif days < 3 %}
+            🟡 MODERATE - Monitor usage
+          {% else %}
+            🟢 GOOD
+          {% endif %}
+
+    # ======================================================
+    # WATER USAGE RATE (24H AVERAGE)
+    # Updated every 5 minutes
+    # ======================================================
+    - name: "Water Usage Rate 24h"
+      unique_id: water_usage_rate_24h
+      unit_of_measurement: "L/h"
+      icon: mdi:water-minus
+      state: >
+        {% set used_24h = states('sensor.water_tanks_used_volume') | float(0) %}
+        {{ (used_24h / 24) | round(1) }}
+      attributes:
+        daily_usage: "{{ states('sensor.water_tanks_used_volume') | float(0) | round(1) }}L/day"
+        weekly_projection: "{{ (states('sensor.water_tanks_used_volume') | float(0) * 7) | round(0) }}L/week"
+
+    # ======================================================
+    # WATER LEVEL PERCENTAGE
+    # For gauge displays
+    # ======================================================
+    - name: "Water Tanks Percentage"
+      unique_id: water_tanks_percentage
+      unit_of_measurement: "%"
+      icon: mdi:water-percent
+      state: >
+        {% set total = states('sensor.water_tanks_total') | float(0) %}
+        {% set capacity = 400 %}
+        {{ ((total / capacity) * 100) | round(0) }}
+
+    # ======================================================
+    # TANK 1 PERCENTAGE
+    # ======================================================
+    - name: "Tank 1 Percentage"
+      unique_id: tank_1_percentage
+      unit_of_measurement: "%"
+      icon: mdi:water
+      state: >
+        {% set level = states('sensor.tank_1_level_smoothed') | float(0) %}
+        {% set capacity = 200 %}
+        {{ ((level / capacity) * 100) | round(0) }}
+
+    # ======================================================
+    # TANK 2 PERCENTAGE
+    # ======================================================
+    - name: "Tank 2 Percentage"
+      unique_id: tank_2_percentage
+      unit_of_measurement: "%"
+      icon: mdi:water
+      state: >
+        {% set level = states('sensor.tank_2_level_smoothed') | float(0) %}
+        {% set capacity = 200 %}
+        {{ ((level / capacity) * 100) | round(0) }}
+
+# ==========================================================
+# BINARY SENSOR TEMPLATES
+# ==========================================================
+- binary_sensor:
+
+    # ======================================================
+    # BATTERY FULL PREDICTIONS
+    # Boolean sensors indicating if battery will reach full charge
+    # ======================================================
+
+    # Strict method: using daily average and remaining solar
+    - name: "Battery Full Expected Today (Strict)"
+      unique_id: battery_full_expected_today_strict
+      icon: mdi:battery-charging-100
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set solar_rem = states('sensor.energy_production_today_remaining') | float(0) %}
+        {% set used_today = states('sensor.total_system_consumption_energy') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+
+        {% set battery_now = (soc / 100.0) * capacity %}
+        {% set usage_remaining = avg_daily - used_today %}
+        {% set usage_remaining = [usage_remaining, 0] | max %}
+        {% set predicted_end = battery_now + solar_rem - usage_remaining %}
+        {% set margin = 0.2 %}
+        {{ predicted_end >= (capacity - margin) }}
+
+    # Forecast method: using Solcast hourly forecasts
+    - name: "Battery Full Expected Today (Forecast)"
+      unique_id: battery_full_expected_today_forecast
+      icon: mdi:battery-clock
+      state: >
+        {% set h = states('sensor.battery_hours_to_full_forecast') | float(0) %}
+        {{ h > 0 and h < 24 }}
+
+    # Tomorrow prediction: will battery be full by end of tomorrow?
+    - name: "Battery Full Expected Tomorrow"
+      unique_id: battery_full_expected_tomorrow
+      icon: mdi:weather-sunny-alert
+      state: >
+        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
+        {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
+        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
+        {% set forecast_tomorrow = state_attr('sensor.solcast_pv_forecast_forecast_tomorrow', 'detailedHourly') %}
+        {% if capacity <= 0 or forecast_tomorrow is none %}
+          false
+        {% else %}
+          {% set battery_now = (soc / 100.0) * capacity %}
+          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
+          {% set ns = namespace(battery=battery_now) %}
+          {% for point in forecast_tomorrow %}
+            {% set pv_kwh = point['pv_estimate'] | float(0) %}
+            {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
+            {% if ns.battery < 0 %}
+              {% set ns.battery = 0 %}
+            {% endif %}
+          {% endfor %}
+          {% set margin = 0.2 %}
+          {{ ns.battery >= (capacity - margin) }}
+        {% endif %}
+
+    # ======================================================
+    # IMPROVED BATTERY FULL PREDICTIONS
+    # Check if battery will be full before sunset / by afternoon
+    # ======================================================
+
+    # Will battery be full before sunset?
+    - name: "Battery Will Be Full Before Sunset"
+      unique_id: battery_will_be_full_before_sunset
+      icon: mdi:weather-sunset-down
+      state: >
+        {% set sensor_state = states('sensor.battery_full_by_sunset_forecast') %}
+        {{ sensor_state.startswith('Yes') or sensor_state == 'Full Now' }}
+
+    # Will battery be full by afternoon (4 PM)?
+    - name: "Battery Will Be Full by Afternoon"
+      unique_id: battery_will_be_full_by_afternoon
+      icon: mdi:weather-partly-cloudy
+      state: >
+        {% set sensor_state = states('sensor.battery_full_by_afternoon_profiled') %}
+        {{ sensor_state.startswith('Yes') or sensor_state == 'Full Now' }}

@@ -1,0 +1,14 @@
+##############################################################
+# UTILITY METERS
+# Counters that reset on a regular cycle (daily, weekly, etc.)
+##############################################################
+
+# ==========================================================
+# DAILY SOLAR PRODUCTION (kWh)
+# Tracks today's solar production, resets at midnight
+# Source: integration sensor that converts PV power to energy
+# ==========================================================
+solar_production_today:
+  source: sensor.solar_energy_kwh
+  cycle: daily
+  name: "Solar Production Today"

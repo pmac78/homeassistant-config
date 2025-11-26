@@ -1,0 +1,90 @@
+2025-11-18 19:44:24.850 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration victron which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2025-11-18 19:44:24.854 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2025-11-18 19:44:44.164 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  __import__('pkg_resources').declare_namespace(__name__)
+
+2025-11-18 19:44:47.322 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.29.5 is exactly one major version older than the runtime version 6.31.1 at api.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+
+2025-11-18 19:44:47.326 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.13/site-packages/google/protobuf/runtime_version.py:98: UserWarning: Protobuf gencode version 5.29.5 is exactly one major version older than the runtime version 6.31.1 at api_options.proto. Please update the gencode to avoid compatibility violations in the next runtime release.
+  warnings.warn(
+
+2025-11-18 19:44:48.934 ERROR (MainThread) [metno] Access to https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete returned error 'ClientConnectorDNSError'
+2025-11-18 19:44:50.791 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `Litres` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc4/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc4/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc4', 'device_class': 'current', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc4/state', 'unique_id': 'D83BDAA8A0B4_sensor_adc4', 'unit_of_measurement': 'Litres'}'
+2025-11-18 19:44:50.819 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `Litres` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc3/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc3/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc3', 'device_class': 'current', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc3/state', 'unique_id': 'D83BDAA8A0B4_sensor_adc3', 'unit_of_measurement': 'Litres'}'
+2025-11-18 19:44:50.836 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc2/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc2/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc2', 'device_class': 'voltage', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc2/state', 'unique_id': 'D83BDAA8A0B4_sensor_adc2', 'unit_of_measurement': ''}'
+2025-11-18 19:44:50.848 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA8A0B4adc1/config', message: '{'device': {'identifiers': 'D83BDAA8A0B4', 'manufacturer': 'KinCony', 'model': 'F16', 'name': 'F16'}, 'config_topic': 'homeassistant/sensor/D83BDAA8A0B4adc1/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc1', 'device_class': 'voltage', 'state_topic': 'homeassistant/sensor/D83BDAA8A0B4adc1/state', 'unique_id': 'D83BDAA8A0B4_sensor_adc1', 'unit_of_measurement': ''}'
+2025-11-18 19:44:50.874 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc4/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc4/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc4', 'device_class': 'current', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc4/state', 'unique_id': 'D83BDAA88474_sensor_adc4', 'unit_of_measurement': ''}'
+2025-11-18 19:44:50.890 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `current`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc3/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc3/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc3', 'device_class': 'current', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc3/state', 'unique_id': 'D83BDAA88474_sensor_adc3', 'unit_of_measurement': ''}'
+2025-11-18 19:44:50.925 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc2/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc2/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc2', 'device_class': 'voltage', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc2/state', 'unique_id': 'D83BDAA88474_sensor_adc2', 'unit_of_measurement': ''}'
+2025-11-18 19:44:50.948 ERROR (MainThread) [homeassistant.components.mqtt.entity] Error 'The unit of measurement `` is not valid together with device class `voltage`' when processing MQTT discovery message topic: 'homeassistant/sensor/D83BDAA88474adc1/config', message: '{'device': {'identifiers': 'D83BDAA88474', 'manufacturer': 'KinCony', 'model': 'B16M', 'name': 'B16'}, 'config_topic': 'homeassistant/sensor/D83BDAA88474adc1/config', 'value_template': '{{ value | float | round(2) }}', 'name': 'adc1', 'device_class': 'voltage', 'state_topic': 'homeassistant/sensor/D83BDAA88474adc1/state', 'unique_id': 'D83BDAA88474_sensor_adc1', 'unit_of_measurement': ''}'
+2025-11-18 19:44:52.390 WARNING (MainThread) [aioesphomeapi.reconnect_logic] Can't connect to ESPHome API for mb @ 192.168.1.120: Error connecting to [AddrInfo(family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, proto=6, sockaddr=IPv4Sockaddr(address='192.168.1.120', port=6053))]: [Errno 113] Connect call failed ('192.168.1.120', 6053) (SocketAPIError)
+2025-11-18 19:44:53.150 WARNING (MainThread) [hass_nabucasa] Could not get subscription info
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/resolver.py", line 117, in resolve
+    resp = await self._resolver.getaddrinfo(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+aiodns.error.DNSError: (3, 'DNS server returned general failure')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1532, in _create_direct_connection
+    hosts = await self._resolve_host(host, port, traces=traces)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1148, in _resolve_host
+    return await asyncio.shield(resolved_host_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1179, in _resolve_host_with_throttle
+    addrs = await self._resolver.resolve(host, port, family=self._family)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp_asyncmdnsresolver/_impl.py", line 140, in resolve
+    return await super().resolve(host, port, family)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/resolver.py", line 126, in resolve
+    raise OSError(None, msg) from exc
+OSError: [Errno None] DNS server returned general failure
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/__init__.py", line 501, in _async_get_billing_plan_type
+    subscription = await async_subscription_info(self, True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/cloud_api.py", line 75, in check_token
+    return await func(cloud, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/hass_nabucasa/cloud_api.py", line 329, in async_subscription_info
+    resp = await cloud.websession.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/client.py", line 770, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/client.py", line 725, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        req, traces=traces, timeout=real_timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 642, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1209, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/aiohttp/connector.py", line 1538, in _create_direct_connection
+    raise ClientConnectorDNSError(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host accounts.nabucasa.com:443 ssl:default [DNS server returned general failure]
+2025-11-18 19:44:53.383 ERROR (MainThread) [hass_nabucasa] No subscription found
+2025-11-18 19:45:17.475 ERROR (MainThread) [custom_components.hacs] Could not update template - Error fetching data from HACS: 500, message='Internal Server Error', url='https://data-v2.hacs.xyz/template/data.json'
+2025-11-18 19:45:17.588 ERROR (MainThread) [custom_components.hacs] Could not update theme - Error fetching data from HACS: 500, message='Internal Server Error', url='https://data-v2.hacs.xyz/theme/data.json'
+2025-11-18 19:45:17.599 ERROR (MainThread) [custom_components.hacs] Could not update plugin - Error fetching data from HACS: 500, message='Internal Server Error', url='https://data-v2.hacs.xyz/plugin/data.json'
+2025-11-18 19:45:52.111 ERROR (MainThread) [homeassistant.components.homeassistant_alerts.coordinator] Error requesting homeassistant_alerts data: 500, message='Attempt to decode JSON with unexpected mimetype: text/html; charset=utf-8', url='https://alerts.home-assistant.io/alerts.json'
+2025-11-18 20:23:35.335 WARNING (SyncWorker_6) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant

@@ -1,0 +1,29 @@
+# Secrets - NEVER commit!
+secrets.yaml
+
+# Database and logs
+home-assistant.log
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
+
+# Storage (contains tokens, auth, etc)
+.storage/
+
+# Backups
+backups/
+
+# Cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Other
+.cloud/
+.google.token
+google_calendars.yaml
+known_devices.yaml
+tts/
+deps/
