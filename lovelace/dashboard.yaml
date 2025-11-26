@@ -71,7 +71,7 @@ views:
             name: Hours to Full
           - entity: sensor.battery_full_time_forecast
             name: Full By
-          - entity: sensor.battery_predicted_eod_soc_profiled
+          - entity: sensor.battery_predicted_end_of_day_soc_profiled
             name: Predicted EOD SoC
 
       # ----------------------------------------------------------

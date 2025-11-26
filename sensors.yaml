@@ -69,14 +69,14 @@
 # Only integrates when actual flow is detected
 # ==========================================================
 - platform: integration
-  source: sensor.water_tanks_fill_rate_filtered
+  source: sensor.water_tanks_fill_rate
   name: "Water Tanks Filled Volume"
   unique_id: water_tanks_filled_volume
   round: 1
   method: trapezoidal
 
 - platform: integration
-  source: sensor.water_tanks_usage_rate_filtered
+  source: sensor.water_tanks_usage_rate
   name: "Water Tanks Used Volume"
   unique_id: water_tanks_used_volume
   round: 1
