@@ -258,9 +258,10 @@
 
     # ======================================================
     # BATTERY PREDICTIONS - FORECAST METHOD
-    # Uses Solcast hourly forecast data
+    # Uses Solcast hourly forecast data + 24-hour load profile
+    # Includes tomorrow's forecast when today's solar is done
     # ======================================================
-    
+
     # Hours until battery is full (using forecast)
     - name: "Battery Hours to Full (Forecast)"
       unique_id: battery_hours_to_full_forecast
@@ -269,37 +270,56 @@
       state: >
         {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
         {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
-        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
-        {% set forecast = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+        {% set forecast_today = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+        {% set forecast_tomorrow = state_attr('sensor.solcast_pv_forecast_forecast_tomorrow', 'detailedHourly') %}
 
-        {% if capacity <= 0 or forecast is none %}
+        {# Helper macro: get 7-day mean consumption for a given hour #}
+        {% macro hour_bucket_mean(h) -%}
+          {% set entity_id = 'sensor.total_usage_hour_%02d_mean' % h %}
+          {{ states(entity_id) | float(0) }}
+        {%- endmacro %}
+
+        {% if capacity <= 0 %}
           0
         {% elif soc >= 99.5 %}
           0
         {% else %}
           {% set battery_now = (soc / 100.0) * capacity %}
-          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
           {% set ns = namespace(battery=battery_now, hours_to_full=None) %}
 
-          {% for point in forecast %}
-            {% set t = as_datetime(point['period_start']) %}
-            {% if t > now() %}
-              {% set pv_kwh = point['pv_estimate'] | float(0) %}
-              {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
-              {% if ns.battery < 0 %}
-                {% set ns.battery = 0 %}
-              {% endif %}
-              {% if ns.battery >= capacity and ns.hours_to_full is none %}
-                {% set ns.hours_to_full = (as_timestamp(t) - as_timestamp(now())) / 3600 %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
+          {# Combine today and tomorrow forecasts #}
+          {% set combined_forecast = [] %}
+          {% if forecast_today is not none %}
+            {% set combined_forecast = combined_forecast + forecast_today %}
+          {% endif %}
+          {% if forecast_tomorrow is not none %}
+            {% set combined_forecast = combined_forecast + forecast_tomorrow %}
+          {% endif %}
 
-          {% if ns.hours_to_full is none %}
+          {% if combined_forecast | length == 0 %}
             0
           {% else %}
-            {% set h = ns.hours_to_full %}
-            {{ [h, 0] | max | round(1) }}
+            {% for point in combined_forecast %}
+              {% set t = as_datetime(point['period_start']) %}
+              {% if t > now() and ns.hours_to_full is none %}
+                {% set pv_kwh = point['pv_estimate'] | float(0) %}
+                {% set hour_of_day = t.hour %}
+                {% set usage_this_hour = hour_bucket_mean(hour_of_day) | float(0) %}
+                {% set ns.battery = ns.battery + pv_kwh - usage_this_hour %}
+                {% if ns.battery < 0 %}
+                  {% set ns.battery = 0 %}
+                {% endif %}
+                {% if ns.battery >= capacity and ns.hours_to_full is none %}
+                  {% set ns.hours_to_full = (as_timestamp(t) - as_timestamp(now())) / 3600 %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if ns.hours_to_full is none %}
+              0
+            {% else %}
+              {{ [ns.hours_to_full, 0] | max | round(1) }}
+            {% endif %}
           {% endif %}
         {% endif %}
 
@@ -310,34 +330,54 @@
       state: >
         {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
         {% set capacity = states('input_number.battery_capacity_kwh') | float(0) %}
-        {% set avg_daily = states('sensor.total_energy_daily_usage_avg_7d') | float(0) %}
-        {% set forecast = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+        {% set forecast_today = state_attr('sensor.solcast_pv_forecast_forecast_today', 'detailedHourly') %}
+        {% set forecast_tomorrow = state_attr('sensor.solcast_pv_forecast_forecast_tomorrow', 'detailedHourly') %}
 
-        {% if capacity <= 0 or forecast is none or soc >= 99.5 %}
+        {# Helper macro: get 7-day mean consumption for a given hour #}
+        {% macro hour_bucket_mean(h) -%}
+          {% set entity_id = 'sensor.total_usage_hour_%02d_mean' % h %}
+          {{ states(entity_id) | float(0) }}
+        {%- endmacro %}
+
+        {% if capacity <= 0 or soc >= 99.5 %}
           {{ none }}
         {% else %}
           {% set battery_now = (soc / 100.0) * capacity %}
-          {% set usage_per_hour = avg_daily / 24 if avg_daily > 0 else 0 %}
           {% set ns = namespace(battery=battery_now, full_time=None) %}
 
-          {% for point in forecast %}
-            {% set t = as_datetime(point['period_start']) %}
-            {% if t > now() %}
-              {% set pv_kwh = point['pv_estimate'] | float(0) %}
-              {% set ns.battery = ns.battery + pv_kwh - usage_per_hour %}
-              {% if ns.battery < 0 %}
-                {% set ns.battery = 0 %}
-              {% endif %}
-              {% if ns.battery >= capacity and ns.full_time is none %}
-                {% set ns.full_time = t %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
+          {# Combine today and tomorrow forecasts #}
+          {% set combined_forecast = [] %}
+          {% if forecast_today is not none %}
+            {% set combined_forecast = combined_forecast + forecast_today %}
+          {% endif %}
+          {% if forecast_tomorrow is not none %}
+            {% set combined_forecast = combined_forecast + forecast_tomorrow %}
+          {% endif %}
 
-          {% if ns.full_time is none %}
+          {% if combined_forecast | length == 0 %}
             {{ none }}
           {% else %}
-            {{ ns.full_time }}
+            {% for point in combined_forecast %}
+              {% set t = as_datetime(point['period_start']) %}
+              {% if t > now() and ns.full_time is none %}
+                {% set pv_kwh = point['pv_estimate'] | float(0) %}
+                {% set hour_of_day = t.hour %}
+                {% set usage_this_hour = hour_bucket_mean(hour_of_day) | float(0) %}
+                {% set ns.battery = ns.battery + pv_kwh - usage_this_hour %}
+                {% if ns.battery < 0 %}
+                  {% set ns.battery = 0 %}
+                {% endif %}
+                {% if ns.battery >= capacity and ns.full_time is none %}
+                  {% set ns.full_time = t %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if ns.full_time is none %}
+              {{ none }}
+            {% else %}
+              {{ ns.full_time }}
+            {% endif %}
           {% endif %}
         {% endif %}
 
