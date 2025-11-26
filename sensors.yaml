@@ -109,31 +109,6 @@
   method: trapezoidal
 
 # ==========================================================
-# WATER TANK RATE & CUMULATIVE VOLUMES
-# Tracks how fast tanks fill/empty and total volume moved
-# ==========================================================
-- platform: derivative
-  source: sensor.water_tanks_total
-  name: "Water Tanks Level Rate"
-  unit_time: h
-  time_window: "00:05:00"
-  round: 3
-
-- platform: integration
-  source: sensor.water_tanks_fill_rate
-  name: "Water Tanks Filled Volume"
-  unique_id: water_tanks_filled_volume
-  round: 1
-  method: trapezoidal
-
-- platform: integration
-  source: sensor.water_tanks_usage_rate
-  name: "Water Tanks Used Volume"
-  unique_id: water_tanks_used_volume
-  round: 1
-  method: trapezoidal
-
-# ==========================================================
 # SOLAR ENERGY INTEGRATION (kWh)
 # Converts solar power (W) to energy (kWh) over time
 # This feeds into the utility_meter for daily tracking

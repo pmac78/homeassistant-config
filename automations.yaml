@@ -209,23 +209,6 @@
 
 
 
-- id: water_prediction_update
-  alias: "Water - Update Predictions"
-  description: "Update water autonomy calculations every 5 minutes"
-  mode: single
-  
-  trigger:
-    - platform: time_pattern
-      minutes: "/5"
-  
-  action:
-    - service: homeassistant.update_entity
-      target:
-        entity_id:
-          - sensor.water_days_remaining
-          - sensor.water_usage_rate_24h
-
-
 - id: '1756966157065'
   alias: Switch 1_1 - Toggle Maglocks
   description: ''

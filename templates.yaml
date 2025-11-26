@@ -101,7 +101,7 @@
         }}
 
     # Fill rate - filtered for integration (2 L/min threshold)
-    - name: "Water Tanks Fill Rate Filtered"
+    - name: "Water Tanks Fill Rate"
       unique_id: water_tanks_fill_rate_filtered
       unit_of_measurement: "L/min"
       state_class: measurement
@@ -114,22 +114,8 @@
           0
         {% endif %}
 
-    # Fill rate - display version
-    - name: "Water Tanks Fill Rate"
-      unique_id: water_tanks_fill_rate
-      unit_of_measurement: "L/min"
-      state_class: measurement
-      state: >
-        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
-        {% set threshold = 2.0 %}
-        {% if r > threshold %}
-          {{ r }}
-        {% else %}
-          0
-        {% endif %}
-
     # Usage rate - filtered for integration (2 L/min threshold)
-    - name: "Water Tanks Usage Rate Filtered"
+    - name: "Water Tanks Usage Rate"
       unique_id: water_tanks_usage_rate_filtered
       unit_of_measurement: "L/min"
       state_class: measurement
@@ -142,46 +128,9 @@
           0
         {% endif %}
 
-    # Usage rate - display version
-    - name: "Water Tanks Usage Rate"
-      unique_id: water_tanks_usage_rate
-      unit_of_measurement: "L/min"
-      state_class: measurement
-      state: >
-        {% set r = states('sensor.water_tanks_level_rate_l_min') | float(0) %}
-        {% set threshold = 2.0 %}
-        {% if r < -threshold %}
-          {{ (r * -1) }}
-        {% else %}
-          0
-        {% endif %}
-
-    # Cumulative water filled (passes through integration sensor)
-    - name: "Water Tanks Filled"
-      unique_id: water_tanks_filled
-      unit_of_measurement: "L"
-      device_class: water
-      state_class: total_increasing
-      state: "{{ states('sensor.water_tanks_filled_volume') }}"
-
-    # Cumulative water used (passes through integration sensor)
-    - name: "Water Tanks Used"
-      unique_id: water_tanks_used
-      unit_of_measurement: "L"
-      device_class: water
-      state_class: total_increasing
-      state: "{{ states('sensor.water_tanks_used_volume') }}"
     # ======================================================
     # SOLAR PRODUCTION
     # ======================================================
-    
-    # Solar production today from utility meter (kWh)
-    - name: "Solar Production Today (kWh)"
-      unique_id: solar_production_today_kwh
-      unit_of_measurement: "kWh"
-      device_class: energy
-      state_class: total
-      state: "{{ states('sensor.solar_production_today') }}"
 
     # Remaining solar forecast for today (from Solcast)
     - name: "Energy Production Today Remaining"
@@ -1170,49 +1119,6 @@
             {{ (kwh / avg_power) | round(1) }}h
           {% else %}
             N/A
-          {% endif %}
-
-    # ======================================================
-    # HWS RECOMMENDATION
-    # Human-readable recommendation for heating
-    # ======================================================
-    - name: "HWS Recommendation"
-      unique_id: hws_recommendation
-      icon: mdi:lightbulb-on
-      state: >
-        {% set score = states('sensor.hws_heating_score') | int(0) %}
-        {% set soc = states('sensor.victron_mqtt_system_0_system_dc_battery_soc') | float(0) %}
-        {% set surplus = states('sensor.hws_available_surplus') | float(0) %}
-        {% set is_on = is_state('switch.hws', 'on') %}
-        
-        {% if is_on %}
-          Currently Heating ✓
-        {% elif score >= 100 and surplus > 2000 %}
-          Excellent for BOOST mode
-        {% elif score >= 80 and surplus > 1100 %}
-          Good for ECO mode
-        {% elif score >= 60 %}
-          OK for ECO mode
-        {% elif score >= 40 %}
-          Marginal conditions
-        {% else %}
-          Not recommended
-        {% endif %}
-      attributes:
-        detail: >
-          Score: {{ states('sensor.hws_heating_score') }}/100
-          Battery: {{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') }}%
-          Surplus: {{ states('sensor.hws_available_surplus') }}W
-          Predicted EOD: {{ states('sensor.battery_predicted_end_of_day_soc_profiled') }}%
-        next_action: >
-          {% set score = states('sensor.hws_heating_score') | int(0) %}
-          {% set is_on = is_state('switch.hws', 'on') %}
-          {% if is_on %}
-            System will stop if conditions deteriorate
-          {% elif score >= 60 %}
-            Will auto-start when conditions optimal
-          {% else %}
-            Waiting for better solar/battery conditions
           {% endif %}
 
     # ======================================================
