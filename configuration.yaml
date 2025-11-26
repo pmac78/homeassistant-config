@@ -5,6 +5,17 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
 
+# YAML-mode dashboards (editable via files)
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-offgrid:
+      mode: yaml
+      filename: lovelace/dashboard.yaml
+      title: Off-Grid
+      icon: mdi:solar-power-variant
+      show_in_sidebar: true
+
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml

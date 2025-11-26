@@ -1,0 +1,299 @@
+##############################################################
+# MAIN DASHBOARD - YAML MODE
+# Off-grid solar/battery system monitoring
+##############################################################
+
+title: Off-Grid System
+views:
+  # ============================================================
+  # ENERGY OVERVIEW
+  # ============================================================
+  - title: Energy
+    path: energy
+    icon: mdi:solar-power
+    cards:
+      # ----------------------------------------------------------
+      # TOP ROW: Key metrics at a glance
+      # ----------------------------------------------------------
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.victron_mqtt_system_0_system_dc_battery_soc
+            name: Battery
+            min: 0
+            max: 100
+            severity:
+              green: 60
+              yellow: 30
+              red: 0
+            needle: true
+
+          - type: gauge
+            entity: sensor.victron_mqtt_system_0_system_dc_pv_power
+            name: Solar
+            min: 0
+            max: 3500
+            severity:
+              green: 1500
+              yellow: 500
+              red: 0
+            needle: true
+            unit: W
+
+          - type: gauge
+            entity: sensor.total_system_consumption_power
+            name: Load
+            min: 0
+            max: 2000
+            severity:
+              green: 0
+              yellow: 500
+              red: 1000
+            needle: true
+            unit: W
+
+      # ----------------------------------------------------------
+      # BATTERY STATUS
+      # ----------------------------------------------------------
+      - type: entities
+        title: Battery Status
+        icon: mdi:battery-charging
+        entities:
+          - entity: sensor.victron_mqtt_system_0_system_dc_battery_soc
+            name: State of Charge
+          - entity: sensor.victron_mqtt_system_0_system_dc_battery_power
+            name: Battery Power
+          - entity: sensor.battery_autonomy_current_load
+            name: Autonomy (Current Load)
+          - entity: sensor.battery_autonomy_avg_load
+            name: Autonomy (Avg Load)
+          - entity: sensor.battery_hours_to_full_forecast
+            name: Hours to Full
+          - entity: sensor.battery_full_time_forecast
+            name: Full By
+          - entity: sensor.battery_predicted_eod_soc_profiled
+            name: Predicted EOD SoC
+
+      # ----------------------------------------------------------
+      # SOLAR PRODUCTION
+      # ----------------------------------------------------------
+      - type: entities
+        title: Solar Production
+        icon: mdi:solar-panel
+        entities:
+          - entity: sensor.victron_mqtt_system_0_system_dc_pv_power
+            name: Current Production
+          - entity: sensor.solar_production_today
+            name: Today's Production
+          - entity: sensor.solcast_pv_forecast_forecast_remaining_today
+            name: Remaining Today
+          - entity: sensor.solcast_pv_forecast_forecast_today
+            name: Total Forecast Today
+          - entity: sensor.solcast_pv_forecast_forecast_tomorrow
+            name: Forecast Tomorrow
+
+      # ----------------------------------------------------------
+      # BATTERY PREDICTIONS
+      # ----------------------------------------------------------
+      - type: entities
+        title: Predictions
+        icon: mdi:crystal-ball
+        entities:
+          - entity: binary_sensor.battery_will_be_full_before_sunset
+            name: Full Before Sunset?
+          - entity: binary_sensor.battery_will_be_full_by_afternoon
+            name: Full by 4 PM?
+          - entity: sensor.battery_full_by_sunset_forecast
+            name: Sunset Prediction
+          - entity: sensor.battery_soc_at_sunrise_profiled
+            name: SoC at Sunrise
+
+      # ----------------------------------------------------------
+      # POWER FLOW (if you have a power flow card installed)
+      # ----------------------------------------------------------
+      - type: entities
+        title: Power Flow
+        icon: mdi:transmission-tower
+        entities:
+          - entity: sensor.victron_mqtt_system_0_system_dc_pv_power
+            name: Solar In
+          - entity: sensor.total_system_consumption_power
+            name: Total Consumption
+          - entity: sensor.victron_dc_consumption_power
+            name: DC Loads
+          - entity: sensor.total_ac_power
+            name: AC Loads (Monitored)
+
+  # ============================================================
+  # WATER MANAGEMENT
+  # ============================================================
+  - title: Water
+    path: water
+    icon: mdi:water
+    cards:
+      # ----------------------------------------------------------
+      # TANK LEVELS
+      # ----------------------------------------------------------
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.tank_1_percentage
+            name: Tank 1
+            min: 0
+            max: 100
+            severity:
+              green: 50
+              yellow: 25
+              red: 0
+            needle: true
+            unit: "%"
+
+          - type: gauge
+            entity: sensor.tank_2_percentage
+            name: Tank 2
+            min: 0
+            max: 100
+            severity:
+              green: 50
+              yellow: 25
+              red: 0
+            needle: true
+            unit: "%"
+
+          - type: gauge
+            entity: sensor.water_tanks_percentage
+            name: Total
+            min: 0
+            max: 100
+            severity:
+              green: 50
+              yellow: 25
+              red: 0
+            needle: true
+            unit: "%"
+
+      # ----------------------------------------------------------
+      # WATER STATUS
+      # ----------------------------------------------------------
+      - type: entities
+        title: Water Status
+        icon: mdi:water-pump
+        entities:
+          - entity: sensor.water_tanks_total
+            name: Total Water
+          - entity: sensor.tank_1_level_smoothed
+            name: Tank 1 Level
+          - entity: sensor.tank_2_level_smoothed
+            name: Tank 2 Level
+          - entity: sensor.water_days_remaining
+            name: Days Remaining
+          - entity: sensor.water_usage_rate_24h
+            name: Usage Rate (24h avg)
+
+      # ----------------------------------------------------------
+      # WATER FLOW
+      # ----------------------------------------------------------
+      - type: entities
+        title: Water Flow
+        icon: mdi:pipe
+        entities:
+          - entity: sensor.water_tanks_level_rate_l_min
+            name: Current Rate
+          - entity: sensor.water_tanks_fill_rate
+            name: Fill Rate
+          - entity: sensor.water_tanks_usage_rate
+            name: Usage Rate
+          - entity: sensor.water_tanks_filled_volume
+            name: Total Filled
+          - entity: sensor.water_tanks_used_volume
+            name: Total Used
+
+  # ============================================================
+  # HOT WATER SYSTEM (HWS)
+  # ============================================================
+  - title: Hot Water
+    path: hws
+    icon: mdi:water-boiler
+    cards:
+      # ----------------------------------------------------------
+      # HWS CONTROL
+      # ----------------------------------------------------------
+      - type: entities
+        title: HWS Control
+        icon: mdi:water-boiler
+        show_header_toggle: false
+        entities:
+          - entity: switch.hws
+            name: Hot Water Switch
+          - entity: sensor.hws_detected_mode
+            name: Current Mode
+          - entity: sensor.hws_session_duration
+            name: Session Duration
+
+      # ----------------------------------------------------------
+      # HWS STATUS & RECOMMENDATIONS
+      # ----------------------------------------------------------
+      - type: entities
+        title: HWS Status
+        icon: mdi:information
+        entities:
+          - entity: sensor.hws_heating_score
+            name: Heating Score
+          - entity: sensor.hws_recommendation_v2
+            name: Recommendation
+          - entity: sensor.hws_optimal_start_window
+            name: Optimal Start
+          - entity: sensor.hws_can_afford_heating
+            name: Can Afford Heating?
+          - entity: sensor.hws_available_surplus
+            name: Available Surplus
+
+      # ----------------------------------------------------------
+      # HWS ENERGY
+      # ----------------------------------------------------------
+      - type: entities
+        title: HWS Energy
+        icon: mdi:lightning-bolt
+        entities:
+          - entity: sensor.shellypro4pm_6825ddd5de40_switch_0_power
+            name: Current Power
+          - entity: sensor.shellypro4pm_6825ddd5de40_switch_0_energy
+            name: Energy Today
+
+      # ----------------------------------------------------------
+      # CONDITIONS FOR HEATING
+      # ----------------------------------------------------------
+      - type: markdown
+        title: Heating Conditions
+        content: |
+          **Current Conditions:**
+          - Battery: {{ states('sensor.victron_mqtt_system_0_system_dc_battery_soc') }}%
+          - Solar: {{ states('sensor.victron_mqtt_system_0_system_dc_pv_power') }}W
+          - Surplus: {{ states('sensor.hws_available_surplus') }}W
+          - Score: {{ states('sensor.hws_heating_score') }}/100
+
+          **Thresholds:**
+          - ECO mode (900W): Need >1100W surplus
+          - BOOST mode (1800W): Need >2000W surplus
+          - Min battery: 70% to start, 75%+ preferred
+
+  # ============================================================
+  # LIGHTING & SWITCHES
+  # ============================================================
+  - title: Lights
+    path: lights
+    icon: mdi:lightbulb
+    cards:
+      - type: entities
+        title: Scenes
+        entities:
+          - entity: scene.bright_lights
+            name: Bright Lights
+          - entity: scene.nightlight
+            name: Nightlight
+
+      - type: entities
+        title: Switches
+        entities:
+          - entity: switch.hws
+            name: Hot Water
