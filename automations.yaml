@@ -331,6 +331,54 @@
     target:
       entity_id: scene.nightlight
   mode: single
+
+# ============================================================
+# DOOR-TRIGGERED STEP LIGHTS
+# Turns on Steps WLED when main door opens at night
+# ============================================================
+- id: steps_light_on_door_open
+  alias: "Steps Light - Door Open at Night"
+  description: "Turn Steps WLED to full brightness when main door opens after dark"
+  mode: restart
+
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.main_door_sensor_opening
+      to: "on"
+
+  condition:
+    # Only run after sunset and before sunrise
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+
+  action:
+    # Save current state of Steps light
+    - service: scene.create
+      data:
+        scene_id: steps_before_door
+        snapshot_entities:
+          - light.steps
+
+    # Turn Steps to full brightness
+    - service: light.turn_on
+      target:
+        entity_id: light.steps
+      data:
+        brightness: 255
+
+    # Wait 2 minutes
+    - delay:
+        minutes: 2
+
+    # Restore previous state
+    - service: scene.turn_on
+      target:
+        entity_id: scene.steps_before_door
+
 - id: '1763552509172'
   alias: Trigger Bright Lights
   description: ''
