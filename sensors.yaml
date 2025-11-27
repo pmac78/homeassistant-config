@@ -123,18 +123,17 @@
   unit_time: h
 
 # ==========================================================
-# 7-DAY AVERAGE TOTAL ENERGY USAGE
-# Calculates mean daily TOTAL consumption (DC + Inverter) over past week
+# 3-DAY AVERAGE TOTAL ENERGY USAGE
+# Calculates mean daily TOTAL consumption (DC + Inverter) over past 3 days
 # Used for battery autonomy and prediction calculations
-# UPDATED: Now uses total system consumption instead of DC only
 # ==========================================================
 - platform: statistics
-  name: "Total Energy Daily Usage Avg (7d)"
-  unique_id: total_energy_daily_usage_avg_7d
+  name: "Total Energy Daily Usage Avg (3d)"
+  unique_id: total_energy_daily_usage_avg_3d
   entity_id: sensor.total_system_consumption_energy
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 100
 
 # ==========================================================
@@ -153,12 +152,11 @@
   sampling_size: 200
 
 # ==========================================================
-# 24-HOUR LOAD PROFILE - 7-DAY MEAN PER HOUR
+# 24-HOUR LOAD PROFILE - 3-DAY MEAN PER HOUR
 # Creates statistical averages for each hour of the day
 # Enables accurate time-of-day load predictions
 # Each sensor calculates mean kWh used during that hour
-# over the past 7 days
-# UPDATED: Now uses TOTAL consumption (DC + Inverter)
+# over the past 3 days
 # ==========================================================
 - platform: statistics
   name: "Total Usage Hour 00 Mean"
@@ -166,7 +164,7 @@
   entity_id: sensor.total_usage_hour_00_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -175,7 +173,7 @@
   entity_id: sensor.total_usage_hour_01_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -184,7 +182,7 @@
   entity_id: sensor.total_usage_hour_02_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -193,7 +191,7 @@
   entity_id: sensor.total_usage_hour_03_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -202,7 +200,7 @@
   entity_id: sensor.total_usage_hour_04_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -211,7 +209,7 @@
   entity_id: sensor.total_usage_hour_05_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -220,7 +218,7 @@
   entity_id: sensor.total_usage_hour_06_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -229,7 +227,7 @@
   entity_id: sensor.total_usage_hour_07_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -238,7 +236,7 @@
   entity_id: sensor.total_usage_hour_08_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -247,7 +245,7 @@
   entity_id: sensor.total_usage_hour_09_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -256,7 +254,7 @@
   entity_id: sensor.total_usage_hour_10_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -265,7 +263,7 @@
   entity_id: sensor.total_usage_hour_11_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -274,7 +272,7 @@
   entity_id: sensor.total_usage_hour_12_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -283,7 +281,7 @@
   entity_id: sensor.total_usage_hour_13_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -292,7 +290,7 @@
   entity_id: sensor.total_usage_hour_14_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -301,7 +299,7 @@
   entity_id: sensor.total_usage_hour_15_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -310,7 +308,7 @@
   entity_id: sensor.total_usage_hour_16_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -319,7 +317,7 @@
   entity_id: sensor.total_usage_hour_17_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -328,7 +326,7 @@
   entity_id: sensor.total_usage_hour_18_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -337,7 +335,7 @@
   entity_id: sensor.total_usage_hour_19_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -346,7 +344,7 @@
   entity_id: sensor.total_usage_hour_20_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -355,7 +353,7 @@
   entity_id: sensor.total_usage_hour_21_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -364,7 +362,7 @@
   entity_id: sensor.total_usage_hour_22_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -373,5 +371,5 @@
   entity_id: sensor.total_usage_hour_23_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500

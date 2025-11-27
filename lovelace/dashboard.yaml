@@ -101,8 +101,6 @@ views:
         entities:
           - entity: binary_sensor.battery_will_be_full_before_sunset
             name: Full Before Sunset?
-          - entity: binary_sensor.battery_will_be_full_by_afternoon
-            name: Full by 4 PM?
           - entity: sensor.battery_full_by_sunset_forecast
             name: Sunset Prediction
           - entity: sensor.battery_soc_at_sunrise_profiled
