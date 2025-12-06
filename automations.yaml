@@ -390,14 +390,14 @@
       entity_id: switch.b16m_output05
   mode: restart
 
-- id: switch_4_1_cycle_rear_bed
-  alias: "Switch 4_1 - Cycle Rear Bed Brightness"
+- id: switch_4_2_cycle_rear_bed
+  alias: "Switch 4_2 - Cycle Rear Bed Brightness"
   description: "Cycle rear bed light: Off → 20% → 60% → 100% → Off"
   triggers:
   - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
     domain: zha
     type: remote_button_short_press
-    subtype: button_1
+    subtype: button_2
     trigger: device
   conditions: []
   actions:
