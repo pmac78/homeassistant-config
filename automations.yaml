@@ -459,6 +459,107 @@
               entity_id: light.rear_bed
   mode: single
 
+- id: switch_4_1_cycle_bathroom
+  alias: "Switch 4_1 - Cycle Bathroom Brightness"
+  description: "Cycle bathroom light: Off → 20% → 50% → 100% → Off"
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - choose:
+      # If OFF → turn on at 20%
+      - conditions:
+          - condition: state
+            entity_id: light.bathroom
+            state: "off"
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.bathroom
+            data:
+              brightness_pct: 20
+      # If at ~20% (brightness <= 55) → set to 50%
+      - conditions:
+          - condition: state
+            entity_id: light.bathroom
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.bathroom
+            attribute: brightness
+            below: 56
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.bathroom
+            data:
+              brightness_pct: 50
+      # If at ~50% (brightness 56-140) → set to 100%
+      - conditions:
+          - condition: state
+            entity_id: light.bathroom
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.bathroom
+            attribute: brightness
+            above: 55
+            below: 141
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.bathroom
+            data:
+              brightness_pct: 100
+      # If at ~100% (brightness > 140) → turn off
+      - conditions:
+          - condition: state
+            entity_id: light.bathroom
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.bathroom
+            attribute: brightness
+            above: 140
+        sequence:
+          - service: light.turn_off
+            target:
+              entity_id: light.bathroom
+  mode: single
+
+- id: switch_4_1_double_bathroom_off
+  alias: "Switch 4_1 Double - Bathroom Off"
+  description: "Double press button 1 to turn off bathroom light"
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - service: light.turn_off
+    target:
+      entity_id: light.bathroom
+  mode: single
+
+- id: switch_4_2_double_rear_bed_off
+  alias: "Switch 4_2 Double - Rear Bed Off"
+  description: "Double press button 2 to turn off rear bed light"
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - service: light.turn_off
+    target:
+      entity_id: light.rear_bed
+  mode: single
+
 - id: '1763275768553'
   alias: Switch 2_1 -  Toggle Flood Passenger
   description: ''
