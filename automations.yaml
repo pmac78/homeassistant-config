@@ -390,6 +390,75 @@
       entity_id: switch.b16m_output05
   mode: restart
 
+- id: switch_4_1_cycle_rear_bed
+  alias: "Switch 4_1 - Cycle Rear Bed Brightness"
+  description: "Cycle rear bed light: Off → 20% → 60% → 100% → Off"
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - choose:
+      # If OFF → turn on at 20%
+      - conditions:
+          - condition: state
+            entity_id: light.rear_bed
+            state: "off"
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.rear_bed
+            data:
+              brightness_pct: 20
+      # If at ~20% (brightness <= 55) → set to 60%
+      - conditions:
+          - condition: state
+            entity_id: light.rear_bed
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.rear_bed
+            attribute: brightness
+            below: 56
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.rear_bed
+            data:
+              brightness_pct: 60
+      # If at ~60% (brightness 56-160) → set to 100%
+      - conditions:
+          - condition: state
+            entity_id: light.rear_bed
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.rear_bed
+            attribute: brightness
+            above: 55
+            below: 161
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id: light.rear_bed
+            data:
+              brightness_pct: 100
+      # If at ~100% (brightness > 160) → turn off
+      - conditions:
+          - condition: state
+            entity_id: light.rear_bed
+            state: "on"
+          - condition: numeric_state
+            entity_id: light.rear_bed
+            attribute: brightness
+            above: 160
+        sequence:
+          - service: light.turn_off
+            target:
+              entity_id: light.rear_bed
+  mode: single
+
 - id: '1763275768553'
   alias: Switch 2_1 -  Toggle Flood Passenger
   description: ''
