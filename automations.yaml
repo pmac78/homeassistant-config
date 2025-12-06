@@ -246,6 +246,124 @@
     target:
       entity_id: switch.bed_lift
   mode: restart
+
+- id: switch_1_3_arrive_camp
+  alias: "Switch 1_3 - Arrive at Camp"
+  description: "Short press button 3 to enable all camp services and lighting"
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_3
+    trigger: device
+  conditions: []
+  actions:
+  # F16 Switches
+  - service: switch.turn_off
+    target:
+      entity_id: switch.mag_locks
+  - service: switch.turn_on
+    target:
+      entity_id:
+        - switch.hws
+        - switch.starlink
+        - switch.quinled_an1
+        - switch.quinled_an2
+        - switch.towel_rails
+        - switch.usb_outlets
+        - switch.water_pump_internal
+  # B16M Switches
+  - service: switch.turn_on
+    target:
+      entity_id:
+        - switch.b16m_output12  # Roof Hatch Fan
+        - switch.b16m_output14  # Ventilation Couch
+        - switch.b16m_output13  # Ventilation Fridge
+        - switch.b16m_output16  # Sensor Power 12v
+        - switch.b16m_output06  # Sensor Power 24v
+  # Shelly 240v Switches
+  - service: switch.turn_on
+    target:
+      entity_id:
+        - switch.shellypro4pm_6825ddd5de40_switch_3  # AC
+        - switch.shellypro4pm_8813bff257a4_switch_1  # Dishwasher
+        - switch.shellypro4pm_8813bff257a4_switch_3  # Fridge
+        - switch.shellypro4pm_8813bff257a4_switch_0  # Microwave
+  - service: switch.turn_off
+    target:
+      entity_id: switch.shellypro4pm_6825ddd5de40_switch_2  # HWS 240v (controlled by other automations)
+  # Arrival Lighting - only after sunset
+  - if:
+      - condition: sun
+        after: sunset
+    then:
+      - service: light.turn_on
+        target:
+          entity_id:
+            - light.dining
+            - light.kickboard
+            - light.cabinets
+        data:
+          brightness_pct: 50
+  mode: single
+
+- id: switch_1_3_long_prepare_drive
+  alias: "Switch 1_3 Long - Prepare to Drive"
+  description: "Long press button 3 to disable non-essential services for travel"
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_long_press
+    subtype: button_3
+    trigger: device
+  conditions: []
+  actions:
+  # Lock cabinets for travel
+  - service: switch.turn_on
+    target:
+      entity_id: switch.mag_locks
+  # Turn off non-essentials
+  - service: switch.turn_off
+    target:
+      entity_id:
+        - switch.hws
+        - switch.quinled_an1
+        - switch.quinled_an2
+        - switch.towel_rails
+        - switch.water_pump_internal
+        - switch.b16m_output12  # Roof Hatch Fan
+  # Keep these ON: Starlink, USB Outlets, Sensor Power, Ventilation, Fridge
+  - service: switch.turn_on
+    target:
+      entity_id:
+        - switch.starlink
+        - switch.usb_outlets
+        - switch.b16m_output16  # Sensor Power 12v
+        - switch.b16m_output06  # Sensor Power 24v
+        - switch.b16m_output14  # Ventilation Couch
+        - switch.b16m_output13  # Ventilation Fridge
+        - switch.shellypro4pm_8813bff257a4_switch_3  # Fridge (always on)
+  # Turn off 240v non-essentials
+  - service: switch.turn_off
+    target:
+      entity_id:
+        - switch.shellypro4pm_6825ddd5de40_switch_3  # AC
+        - switch.shellypro4pm_6825ddd5de40_switch_2  # HWS 240v
+        - switch.shellypro4pm_8813bff257a4_switch_1  # Dishwasher
+        - switch.shellypro4pm_8813bff257a4_switch_0  # Microwave
+  # Turn off all lights
+  - service: light.turn_off
+    target:
+      entity_id:
+        - light.dining
+        - light.cabinets
+        - light.kickboard
+        - light.ceiling
+        - light.bathroom
+        - light.rear_bed
+        - light.steps
+  mode: single
+
 - id: '1763275768553'
   alias: Switch 2_1 -  Toggle Flood Passenger
   description: ''
