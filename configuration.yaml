@@ -21,6 +21,7 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 input_boolean: !include input_boolean.yaml
 input_number: !include input_number.yaml
+input_select: !include input_select.yaml
 timer: !include timer.yaml
 template: !include templates.yaml
 sensor: !include sensors.yaml

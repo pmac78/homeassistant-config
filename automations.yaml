@@ -258,6 +258,12 @@
     trigger: device
   conditions: []
   actions:
+  # Set camper mode to At Camp
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.camper_mode
+    data:
+      option: "At Camp"
   # F16 Switches
   - service: switch.turn_off
     target:
@@ -328,6 +334,12 @@
     trigger: device
   conditions: []
   actions:
+  # Set camper mode to Driving
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.camper_mode
+    data:
+      option: "Driving"
   # Lock cabinets for travel
   - service: switch.turn_on
     target:
@@ -389,6 +401,68 @@
     target:
       entity_id: switch.b16m_output05
   mode: restart
+
+# Lighting Scene Automations
+- id: scene_auto_morning
+  alias: "Scene - Morning (Sunrise)"
+  description: "Gradually bring up lights at sunrise when At Camp"
+  triggers:
+  - platform: sun
+    event: sunrise
+    trigger: sun
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: "At Camp"
+  actions:
+  - service: light.turn_on
+    target:
+      entity_id:
+        - light.ceiling
+        - light.kickboard
+        - light.bathroom
+    data:
+      brightness_pct: 30
+      transition: 600  # 10 minutes
+  mode: single
+
+- id: scene_auto_day
+  alias: "Scene - Day (8am)"
+  description: "Activate day lighting at 8am when At Camp"
+  triggers:
+  - platform: time
+    at: "08:00:00"
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: "At Camp"
+  actions:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.day
+    data:
+      transition: 60  # 1 minute transition
+  mode: single
+
+- id: scene_auto_evening
+  alias: "Scene - Evening (Sunset)"
+  description: "Activate evening lighting at sunset when At Camp"
+  triggers:
+  - platform: sun
+    event: sunset
+    trigger: sun
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: "At Camp"
+  actions:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.evening
+    data:
+      transition: 300  # 5 minute transition
+  mode: single
 
 - id: switch_4_2_cycle_rear_bed
   alias: "Switch 4_2 - Cycle Rear Bed Brightness"
