@@ -292,17 +292,27 @@
   - service: switch.turn_off
     target:
       entity_id: switch.shellypro4pm_6825ddd5de40_switch_2  # HWS 240v (controlled by other automations)
-  # Arrival Lighting - only after sunset
-  - if:
-      - condition: sun
-        after: sunset
-    then:
+  # Arrival Lighting - daytime 50%, nighttime 75%
+  - choose:
+      - conditions:
+          - condition: sun
+            after: sunset
+        sequence:
+          - service: light.turn_on
+            target:
+              entity_id:
+                - light.kickboard
+                - light.dining
+                - light.ceiling
+            data:
+              brightness_pct: 75
+    default:
       - service: light.turn_on
         target:
           entity_id:
-            - light.dining
             - light.kickboard
-            - light.cabinets
+            - light.dining
+            - light.ceiling
         data:
           brightness_pct: 50
   mode: single
@@ -322,11 +332,10 @@
   - service: switch.turn_on
     target:
       entity_id: switch.mag_locks
-  # Turn off non-essentials
+  # Turn off non-essentials (keep F16 HWS on for travel)
   - service: switch.turn_off
     target:
       entity_id:
-        - switch.hws
         - switch.quinled_an1
         - switch.quinled_an2
         - switch.towel_rails
