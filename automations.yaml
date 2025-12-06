@@ -464,11 +464,7 @@
     entity_id: input_select.camper_mode
     state: "At Camp"
   actions:
-  - service: scene.turn_on
-    target:
-      entity_id: scene.day
-    data:
-      transition: 60  # 1 minute transition
+  - service: script.scene_day
   mode: single
 
 - id: scene_auto_evening
@@ -483,11 +479,7 @@
     entity_id: input_select.camper_mode
     state: "At Camp"
   actions:
-  - service: scene.turn_on
-    target:
-      entity_id: scene.evening
-    data:
-      transition: 300  # 5 minute transition
+  - service: script.scene_evening
   mode: single
 
 - id: switch_4_2_cycle_rear_bed
