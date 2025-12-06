@@ -392,7 +392,6 @@
   - platform: state
     entity_id: switch.b16m_output05
     to: "on"
-    trigger: state
   conditions: []
   actions:
   - delay:
