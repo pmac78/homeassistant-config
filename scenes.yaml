@@ -1,5 +1,6 @@
 # Lighting Scenes
 # WLED masters set to 100% for full segment control
+# Using brightness: 0 instead of state: off for WLED compatibility
 
 - id: scene_morning
   name: Morning
@@ -11,7 +12,8 @@
       state: "on"
       brightness_pct: 100
     light.ceiling:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.kickboard:
       state: "on"
       brightness_pct: 20
@@ -19,14 +21,17 @@
       state: "on"
       brightness_pct: 30
     light.dining:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.bathroom:
       state: "on"
       brightness_pct: 30
     light.rear_bed:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.steps:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
 
 - id: scene_day
   name: Day
@@ -38,7 +43,8 @@
       state: "on"
       brightness_pct: 100
     light.ceiling:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.kickboard:
       state: "on"
       brightness_pct: 50
@@ -52,9 +58,11 @@
       state: "on"
       brightness_pct: 50
     light.rear_bed:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.steps:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
 
 - id: scene_evening
   name: Evening
@@ -81,9 +89,11 @@
       state: "on"
       brightness_pct: 50
     light.rear_bed:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.steps:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
 
 - id: scene_sleep
   name: Sleep
@@ -95,17 +105,23 @@
       state: "on"
       brightness_pct: 100
     light.ceiling:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.kickboard:
       state: "on"
       brightness_pct: 1
     light.cabinets:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.dining:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.bathroom:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.rear_bed:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
     light.steps:
-      state: "off"
+      state: "on"
+      brightness_pct: 0
