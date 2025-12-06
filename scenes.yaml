@@ -1,63 +1,104 @@
 # Lighting Scenes
+# WLED masters set to 100% for full segment control
+
 - id: scene_morning
   name: Morning
   entities:
-    light.ceiling:
+    light.wled_1_main:
       state: "on"
-      brightness_pct: 30
-    light.kickboard:
+      brightness_pct: 100
+    light.wled_main_2:
       state: "on"
-      brightness_pct: 30
-    light.bathroom:
-      state: "on"
-      brightness_pct: 30
-
-- id: scene_day
-  name: Day
-  entities:
-    light.ceiling:
-      state: "on"
-      brightness_pct: 30
-    light.kickboard:
-      state: "on"
-      brightness_pct: 30
-    light.cabinets:
-      state: "on"
-      brightness_pct: 50
-    light.dining:
-      state: "on"
-      brightness_pct: 50
-
-- id: scene_evening
-  name: Evening
-  entities:
-    light.ceiling:
-      state: "on"
-      brightness_pct: 20
-    light.kickboard:
-      state: "on"
-      brightness_pct: 20
-    light.cabinets:
-      state: "on"
-      brightness_pct: 50
-    light.dining:
-      state: "on"
-      brightness_pct: 50
-    light.bathroom:
-      state: "on"
-      brightness_pct: 20
-    light.rear_bed:
-      state: "on"
-      brightness_pct: 20
-
-- id: scene_sleep
-  name: Sleep
-  entities:
+      brightness_pct: 100
     light.ceiling:
       state: "off"
     light.kickboard:
       state: "on"
-      brightness_pct: 2
+      brightness_pct: 20
+    light.cabinets:
+      state: "on"
+      brightness_pct: 30
+    light.dining:
+      state: "off"
+    light.bathroom:
+      state: "on"
+      brightness_pct: 30
+    light.rear_bed:
+      state: "off"
+    light.steps:
+      state: "off"
+
+- id: scene_day
+  name: Day
+  entities:
+    light.wled_1_main:
+      state: "on"
+      brightness_pct: 100
+    light.wled_main_2:
+      state: "on"
+      brightness_pct: 100
+    light.ceiling:
+      state: "off"
+    light.kickboard:
+      state: "on"
+      brightness_pct: 50
+    light.cabinets:
+      state: "on"
+      brightness_pct: 70
+    light.dining:
+      state: "on"
+      brightness_pct: 70
+    light.bathroom:
+      state: "on"
+      brightness_pct: 50
+    light.rear_bed:
+      state: "off"
+    light.steps:
+      state: "off"
+
+- id: scene_evening
+  name: Evening
+  entities:
+    light.wled_1_main:
+      state: "on"
+      brightness_pct: 100
+    light.wled_main_2:
+      state: "on"
+      brightness_pct: 100
+    light.ceiling:
+      state: "on"
+      brightness_pct: 20
+    light.kickboard:
+      state: "on"
+      brightness_pct: 20
+    light.cabinets:
+      state: "on"
+      brightness_pct: 70
+    light.dining:
+      state: "on"
+      brightness_pct: 70
+    light.bathroom:
+      state: "on"
+      brightness_pct: 50
+    light.rear_bed:
+      state: "off"
+    light.steps:
+      state: "off"
+
+- id: scene_sleep
+  name: Sleep
+  entities:
+    light.wled_1_main:
+      state: "on"
+      brightness_pct: 100
+    light.wled_main_2:
+      state: "on"
+      brightness_pct: 100
+    light.ceiling:
+      state: "off"
+    light.kickboard:
+      state: "on"
+      brightness_pct: 1
     light.cabinets:
       state: "off"
     light.dining:

@@ -405,7 +405,7 @@
 # Lighting Scene Automations
 - id: scene_auto_morning
   alias: "Scene - Morning (Sunrise)"
-  description: "Gradually bring up lights at sunrise when At Camp"
+  description: "Staged morning lighting at sunrise when At Camp"
   triggers:
   - platform: sun
     event: sunrise
@@ -415,23 +415,49 @@
     entity_id: input_select.camper_mode
     state: "At Camp"
   actions:
+  # Set WLED masters to 100%
   - service: light.turn_on
     target:
       entity_id:
+        - light.wled_1_main
+        - light.wled_main_2
+    data:
+      brightness_pct: 100
+  # Turn off other lights first
+  - service: light.turn_off
+    target:
+      entity_id:
         - light.ceiling
-        - light.kickboard
+        - light.dining
+        - light.rear_bed
+        - light.steps
+  # Stage 1: Kickboard gradual increase over 10 minutes
+  - service: light.turn_on
+    target:
+      entity_id: light.kickboard
+    data:
+      brightness_pct: 20
+      transition: 600  # 10 minutes
+  # Wait for kickboard transition to complete
+  - delay:
+      minutes: 10
+  # Stage 2: Bathroom and cabinet lights over 1 minute
+  - service: light.turn_on
+    target:
+      entity_id:
         - light.bathroom
+        - light.cabinets
     data:
       brightness_pct: 30
-      transition: 600  # 10 minutes
+      transition: 60  # 1 minute
   mode: single
 
 - id: scene_auto_day
-  alias: "Scene - Day (8am)"
-  description: "Activate day lighting at 8am when At Camp"
+  alias: "Scene - Day (9am)"
+  description: "Activate day lighting at 9am when At Camp"
   triggers:
   - platform: time
-    at: "08:00:00"
+    at: "09:00:00"
     trigger: time
   conditions:
   - condition: state
