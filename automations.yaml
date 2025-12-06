@@ -225,6 +225,27 @@
     entity_id: 249de4b849a8dce4f7194e0a8ae2c741
     domain: switch
   mode: single
+
+- id: switch_1_1_long_bed_lift
+  alias: "Switch 1_1 Long - Bed Lift Timer"
+  description: "Long press button 1 on Switch 1 to activate Bed Lift for 3 minutes"
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_long_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.bed_lift
+  - delay:
+      minutes: 3
+  - service: switch.turn_off
+    target:
+      entity_id: switch.bed_lift
+  mode: restart
 - id: '1763275768553'
   alias: Switch 2_1 -  Toggle Flood Passenger
   description: ''
