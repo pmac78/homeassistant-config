@@ -56,7 +56,8 @@
     light.ceiling:
       state: "off"
     light.kickboard:
-      state: "off"
+      state: "on"
+      brightness_pct: 2
     light.cabinets:
       state: "off"
     light.dining:
