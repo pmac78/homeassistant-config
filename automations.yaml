@@ -373,6 +373,23 @@
         - light.steps
   mode: single
 
+- id: grey_water_valve_auto_off
+  alias: "Grey Water Valve - Auto Off Timer"
+  description: "Automatically turn off grey water valve after 10 minutes"
+  triggers:
+  - platform: state
+    entity_id: switch.b16m_output05
+    to: "on"
+    trigger: state
+  conditions: []
+  actions:
+  - delay:
+      minutes: 10
+  - service: switch.turn_off
+    target:
+      entity_id: switch.b16m_output05
+  mode: restart
+
 - id: '1763275768553'
   alias: Switch 2_1 -  Toggle Flood Passenger
   description: ''
