@@ -392,7 +392,7 @@
 
 - id: switch_4_2_cycle_rear_bed
   alias: "Switch 4_2 - Cycle Rear Bed Brightness"
-  description: "Cycle rear bed light: Off → 20% → 60% → 100% → Off"
+  description: "Cycle rear bed light: Off → 5% → 40% → 100% → Off"
   triggers:
   - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
     domain: zha
@@ -402,7 +402,7 @@
   conditions: []
   actions:
   - choose:
-      # If OFF → turn on at 20%
+      # If OFF → turn on at 5%
       - conditions:
           - condition: state
             entity_id: light.rear_bed
@@ -412,8 +412,8 @@
             target:
               entity_id: light.rear_bed
             data:
-              brightness_pct: 20
-      # If at ~20% (brightness <= 55) → set to 60%
+              brightness_pct: 5
+      # If at ~5% (brightness <= 20) → set to 40%
       - conditions:
           - condition: state
             entity_id: light.rear_bed
@@ -421,14 +421,14 @@
           - condition: numeric_state
             entity_id: light.rear_bed
             attribute: brightness
-            below: 56
+            below: 21
         sequence:
           - service: light.turn_on
             target:
               entity_id: light.rear_bed
             data:
-              brightness_pct: 60
-      # If at ~60% (brightness 56-160) → set to 100%
+              brightness_pct: 40
+      # If at ~40% (brightness 21-130) → set to 100%
       - conditions:
           - condition: state
             entity_id: light.rear_bed
@@ -436,15 +436,15 @@
           - condition: numeric_state
             entity_id: light.rear_bed
             attribute: brightness
-            above: 55
-            below: 161
+            above: 20
+            below: 131
         sequence:
           - service: light.turn_on
             target:
               entity_id: light.rear_bed
             data:
               brightness_pct: 100
-      # If at ~100% (brightness > 160) → turn off
+      # If at ~100% (brightness > 130) → turn off
       - conditions:
           - condition: state
             entity_id: light.rear_bed
@@ -452,7 +452,7 @@
           - condition: numeric_state
             entity_id: light.rear_bed
             attribute: brightness
-            above: 160
+            above: 130
         sequence:
           - service: light.turn_off
             target:
@@ -461,7 +461,7 @@
 
 - id: switch_4_1_cycle_bathroom
   alias: "Switch 4_1 - Cycle Bathroom Brightness"
-  description: "Cycle bathroom light: Off → 20% → 50% → 100% → Off"
+  description: "Cycle bathroom light: Off → 5% → 40% → 100% → Off"
   triggers:
   - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
     domain: zha
@@ -471,7 +471,7 @@
   conditions: []
   actions:
   - choose:
-      # If OFF → turn on at 20%
+      # If OFF → turn on at 5%
       - conditions:
           - condition: state
             entity_id: light.bathroom
@@ -481,8 +481,8 @@
             target:
               entity_id: light.bathroom
             data:
-              brightness_pct: 20
-      # If at ~20% (brightness <= 55) → set to 50%
+              brightness_pct: 5
+      # If at ~5% (brightness <= 20) → set to 40%
       - conditions:
           - condition: state
             entity_id: light.bathroom
@@ -490,14 +490,14 @@
           - condition: numeric_state
             entity_id: light.bathroom
             attribute: brightness
-            below: 56
+            below: 21
         sequence:
           - service: light.turn_on
             target:
               entity_id: light.bathroom
             data:
-              brightness_pct: 50
-      # If at ~50% (brightness 56-140) → set to 100%
+              brightness_pct: 40
+      # If at ~40% (brightness 21-130) → set to 100%
       - conditions:
           - condition: state
             entity_id: light.bathroom
@@ -505,15 +505,15 @@
           - condition: numeric_state
             entity_id: light.bathroom
             attribute: brightness
-            above: 55
-            below: 141
+            above: 20
+            below: 131
         sequence:
           - service: light.turn_on
             target:
               entity_id: light.bathroom
             data:
               brightness_pct: 100
-      # If at ~100% (brightness > 140) → turn off
+      # If at ~100% (brightness > 130) → turn off
       - conditions:
           - condition: state
             entity_id: light.bathroom
@@ -521,7 +521,7 @@
           - condition: numeric_state
             entity_id: light.bathroom
             attribute: brightness
-            above: 140
+            above: 130
         sequence:
           - service: light.turn_off
             target:
