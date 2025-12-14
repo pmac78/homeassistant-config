@@ -29,8 +29,6 @@ ethernet:
 logger:
 
 api:
-  encryption:
-    key: !secret mb_api_key
 
 ota:
   - platform: esphome
