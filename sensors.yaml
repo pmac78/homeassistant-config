@@ -375,3 +375,136 @@
   max_age:
     days: 7
   sampling_size: 500
+
+# ==========================================================
+# KINCONY MB POWER MONITOR - ENERGY INTEGRATION
+# Converts INA226 power sensors (W) to energy (kWh)
+# These sensors will appear in the Energy Dashboard
+# ==========================================================
+- platform: integration
+  source: sensor.ina226_power_1
+  name: "INA226 Energy 1"
+  unique_id: ina226_energy_1
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_2
+  name: "INA226 Energy 2"
+  unique_id: ina226_energy_2
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_3
+  name: "INA226 Energy 3"
+  unique_id: ina226_energy_3
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_4
+  name: "INA226 Energy 4"
+  unique_id: ina226_energy_4
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_5
+  name: "INA226 Energy 5"
+  unique_id: ina226_energy_5
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_6
+  name: "INA226 Energy 6"
+  unique_id: ina226_energy_6
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_7
+  name: "INA226 Energy 7"
+  unique_id: ina226_energy_7
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_8
+  name: "INA226 Energy 8"
+  unique_id: ina226_energy_8
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_9
+  name: "INA226 Energy 9"
+  unique_id: ina226_energy_9
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_10
+  name: "INA226 Energy 10"
+  unique_id: ina226_energy_10
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_11
+  name: "INA226 Energy 11"
+  unique_id: ina226_energy_11
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_12
+  name: "INA226 Energy 12"
+  unique_id: ina226_energy_12
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_13
+  name: "INA226 Energy 13"
+  unique_id: ina226_energy_13
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_14
+  name: "INA226 Energy 14"
+  unique_id: ina226_energy_14
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_15
+  name: "INA226 Energy 15"
+  unique_id: ina226_energy_15
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.ina226_power_16
+  name: "INA226 Energy 16"
+  unique_id: ina226_energy_16
+  unit_prefix: k
+  round: 3
+  method: left
