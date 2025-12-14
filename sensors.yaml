@@ -378,133 +378,133 @@
 
 # ==========================================================
 # KINCONY MB POWER MONITOR - ENERGY INTEGRATION
-# Converts INA226 power sensors (W) to energy (kWh)
+# Converts MB power sensors (W) to energy (kWh)
 # These sensors will appear in the Energy Dashboard
 # ==========================================================
 - platform: integration
-  source: sensor.ina226_power_1
-  name: "INA226 Energy 1"
-  unique_id: ina226_energy_1
+  source: sensor.mb_quinled_an1_power
+  name: "Quinled AN1 Energy"
+  unique_id: mb_quinled_an1_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_2
-  name: "INA226 Energy 2"
-  unique_id: ina226_energy_2
+  source: sensor.mb_quinled_an2_power
+  name: "Quinled AN2 Energy"
+  unique_id: mb_quinled_an2_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_3
-  name: "INA226 Energy 3"
-  unique_id: ina226_energy_3
+  source: sensor.mb_b16_24v_power
+  name: "B16 24V Energy"
+  unique_id: mb_b16_24v_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_4
-  name: "INA226 Energy 4"
-  unique_id: ina226_energy_4
+  source: sensor.mb_usb_outlets_power
+  name: "USB Outlets Energy"
+  unique_id: mb_usb_outlets_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_5
-  name: "INA226 Energy 5"
-  unique_id: ina226_energy_5
+  source: sensor.mb_flood_lights_power
+  name: "Flood Lights Energy"
+  unique_id: mb_flood_lights_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_6
-  name: "INA226 Energy 6"
-  unique_id: ina226_energy_6
+  source: sensor.mb_water_pump_power
+  name: "Water Pump Energy"
+  unique_id: mb_water_pump_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_7
-  name: "INA226 Energy 7"
-  unique_id: ina226_energy_7
+  source: sensor.mb_mag_locks_power
+  name: "Mag Locks Energy"
+  unique_id: mb_mag_locks_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_8
-  name: "INA226 Energy 8"
-  unique_id: ina226_energy_8
+  source: sensor.mb_bed_lift_power
+  name: "Bed Lift Energy"
+  unique_id: mb_bed_lift_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_9
-  name: "INA226 Energy 9"
-  unique_id: ina226_energy_9
+  source: sensor.mb_starlink_power
+  name: "Starlink Energy"
+  unique_id: mb_starlink_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_10
-  name: "INA226 Energy 10"
-  unique_id: ina226_energy_10
+  source: sensor.mb_towel_rails_power
+  name: "Towel Rails Energy"
+  unique_id: mb_towel_rails_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_11
-  name: "INA226 Energy 11"
-  unique_id: ina226_energy_11
+  source: sensor.mb_hws_dc_power
+  name: "HWS DC Energy"
+  unique_id: mb_hws_dc_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_12
-  name: "INA226 Energy 12"
-  unique_id: ina226_energy_12
+  source: sensor.mb_lights_fans_power
+  name: "Lights Fans Energy"
+  unique_id: mb_lights_fans_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_13
-  name: "INA226 Energy 13"
-  unique_id: ina226_energy_13
+  source: sensor.mb_water_pump_ext_power
+  name: "Water Pump External Energy"
+  unique_id: mb_water_pump_ext_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_14
-  name: "INA226 Energy 14"
-  unique_id: ina226_energy_14
+  source: sensor.mb_control_power
+  name: "Control Energy"
+  unique_id: mb_control_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_15
-  name: "INA226 Energy 15"
-  unique_id: ina226_energy_15
+  source: sensor.mb_channel_15_power
+  name: "Channel 15 Energy"
+  unique_id: mb_channel_15_energy
   unit_prefix: k
   round: 3
   method: left
 
 - platform: integration
-  source: sensor.ina226_power_16
-  name: "INA226 Energy 16"
-  unique_id: ina226_energy_16
+  source: sensor.mb_channel_16_power
+  name: "Channel 16 Energy"
+  unique_id: mb_channel_16_energy
   unit_prefix: k
   round: 3
   method: left
