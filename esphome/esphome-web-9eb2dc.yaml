@@ -32,7 +32,6 @@ api:
 
 ota:
   - platform: esphome
-    password: !secret mb_ota_password
 
 web_server:
   port: 80
