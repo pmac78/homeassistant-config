@@ -71,8 +71,6 @@ sensor:
       id: voltage_1
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x41
@@ -94,8 +92,6 @@ sensor:
       id: voltage_2
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x42
@@ -117,8 +113,6 @@ sensor:
       id: voltage_3
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x43
@@ -140,8 +134,6 @@ sensor:
       id: voltage_4
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x44
@@ -163,8 +155,6 @@ sensor:
       id: voltage_5
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x45
@@ -186,8 +176,6 @@ sensor:
       id: voltage_6
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x46
@@ -209,8 +197,6 @@ sensor:
       id: voltage_7
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x47
@@ -232,8 +218,6 @@ sensor:
       id: voltage_8
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   # Bus B - Channels 9-16
   - platform: ina226
@@ -256,8 +240,6 @@ sensor:
       id: voltage_9
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x41
@@ -279,8 +261,6 @@ sensor:
       id: voltage_10
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x42
@@ -302,8 +282,6 @@ sensor:
       id: voltage_11
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x43
@@ -325,8 +303,6 @@ sensor:
       id: voltage_12
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x44
@@ -348,8 +324,6 @@ sensor:
       id: voltage_13
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x45
@@ -371,8 +345,6 @@ sensor:
       id: voltage_14
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x46
@@ -394,8 +366,6 @@ sensor:
       id: voltage_15
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
   - platform: ina226
     address: 0x47
@@ -417,8 +387,6 @@ sensor:
       id: voltage_16
       device_class: voltage
       state_class: measurement
-    shunt_voltage:
-      internal: true
 
 font:
   - file: "gfonts://Roboto"
