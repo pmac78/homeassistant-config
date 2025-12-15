@@ -348,3 +348,64 @@
     target:
       entity_id: scene.bright_lights
   mode: single
+
+# ==========================================================
+# STARTUP - Set Default Relay States
+# Sets relay states when Home Assistant starts
+# ==========================================================
+- id: startup_set_relay_states
+  alias: "Startup - Set Default Relay States"
+  description: "Set F16 and B16M relay states on Home Assistant reboot"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    # F16 Board - Turn ON
+    - service: switch.turn_on
+      target:
+        entity_id:
+          - switch.starlink
+    # F16 Board - Turn OFF
+    - service: switch.turn_off
+      target:
+        entity_id:
+          - switch.f16_output16
+          - switch.flood_passenger
+          - switch.flood_drivers
+          - switch.flood_rear
+          - switch.awning
+          - switch.hws
+          - switch.towel_rails
+          - switch.water_pump_external
+          - switch.mag_locks
+          - switch.bed_lift
+          - switch.water_pump_internal
+          - switch.quinled_dig
+          - switch.usb_outlets
+          - switch.quinled_an2
+          - switch.quinled_an1
+    # B16M Board - Turn ON
+    - service: switch.turn_on
+      target:
+        entity_id:
+          - switch.b16m_output16
+          - switch.b16m_output14
+          - switch.toilet
+          - switch.b16m_output06
+    # B16M Board - Turn OFF
+    - service: switch.turn_off
+      target:
+        entity_id:
+          - switch.b16m_output15
+          - switch.b16m_output13
+          - switch.b16m_output12
+          - switch.b16m_output11
+          - switch.b16m_output10
+          - switch.b16m_output09
+          - switch.b16m_output07
+          - switch.b16m_output05
+          - switch.b16m_output04
+          - switch.b16m_output03
+          - switch.b16m_output02
+          - switch.b16m_output01
+  mode: single
