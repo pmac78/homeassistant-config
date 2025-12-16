@@ -1,5 +1,6 @@
 # Secrets - NEVER commit!
 secrets.yaml
+.mcp.json
 
 # Database and logs
 home-assistant.log
