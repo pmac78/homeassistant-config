@@ -9,18 +9,21 @@ from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from mcp.server import Server
 
-from custom_components.oidc_provider.token_validator import get_issuer_from_request
-
 _LOGGER = logging.getLogger(__name__)
+
+
+def _get_base_url(request: web.Request) -> str:
+    """Get base URL from request."""
+    scheme = request.headers.get("X-Forwarded-Proto", request.scheme)
+    host = request.headers.get("X-Forwarded-Host", request.host)
+    return f"{scheme}://{host}"
 
 
 def _get_protected_resource_metadata(base_url: str) -> dict[str, Any]:
     """Generate OAuth 2.0 Protected Resource Metadata (RFC 9728)."""
     return {
         "resource": base_url,
-        "authorization_servers": [f"{base_url}/oidc"],
         "bearer_methods_supported": ["header"],
-        "resource_signing_alg_values_supported": ["RS256"],
         "resource_documentation": f"{base_url}/api/mcp",
     }
 
@@ -34,7 +37,7 @@ class MCPProtectedResourceMetadataView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         """Return protected resource metadata."""
-        base_url = get_issuer_from_request(request)
+        base_url = _get_base_url(request)
         metadata = _get_protected_resource_metadata(base_url)
         return web.json_response(metadata)
 
@@ -48,7 +51,7 @@ class MCPSubpathProtectedResourceMetadataView(HomeAssistantView):
 
     async def get(self, request: web.Request) -> web.Response:
         """Return protected resource metadata with /mcp suffix."""
-        base_url = get_issuer_from_request(request)
+        base_url = _get_base_url(request)
         metadata = _get_protected_resource_metadata(base_url)
         return web.json_response(metadata)
 
@@ -65,44 +68,39 @@ class MCPEndpointView(HomeAssistantView):
         self.hass = hass
         self.server = server
 
-    def _validate_token(self, request: web.Request) -> dict[str, Any] | None:
-        """Validate the OAuth bearer token."""
+    async def _validate_token(self, request: web.Request) -> dict[str, Any] | None:
+        """Validate a Home Assistant long-lived access token."""
         auth_header = request.headers.get("Authorization", "")
         if not auth_header.startswith("Bearer "):
             return None
 
         token = auth_header[7:]  # Remove "Bearer " prefix
 
-        # Import dynamically to avoid circular dependency
+        # Validate using Home Assistant's built-in auth
         try:
-            from custom_components.oidc_provider.token_validator import (
-                get_issuer_from_request,
-                validate_access_token,
-            )
+            refresh_token = await self.hass.auth.async_validate_access_token(token)
+            if refresh_token is None:
+                _LOGGER.warning("Invalid access token provided")
+                return None
 
-            # Get the expected issuer from the request
-            expected_issuer = get_issuer_from_request(request)
-
-            return validate_access_token(self.hass, token, expected_issuer)
-        except ImportError as e:
-            _LOGGER.error("OIDC provider integration not found: %s", e)
+            return {
+                "user_id": refresh_token.user.id,
+                "user_name": refresh_token.user.name,
+                "token_id": refresh_token.id,
+            }
+        except Exception as e:
+            _LOGGER.error("Error validating access token: %s", e)
             return None
 
     async def post(self, request: web.Request) -> web.Response:
         """Handle POST requests for MCP messages."""
-        # Validate OAuth token
-        token_payload = self._validate_token(request)
+        # Validate access token
+        token_payload = await self._validate_token(request)
         if not token_payload:
-            base_url = get_issuer_from_request(request)
-            # Point to /oidc authorization server metadata directly
-            resource_metadata_url = f"{base_url}/oidc/.well-known/oauth-authorization-server"
-            www_authenticate = (
-                f'Bearer realm="MCP Server", resource_metadata="{resource_metadata_url}"'
-            )
             return web.json_response(
                 {"error": "invalid_token", "error_description": "Invalid or missing token"},
                 status=401,
-                headers={"WWW-Authenticate": www_authenticate},
+                headers={"WWW-Authenticate": 'Bearer realm="MCP Server"'},
             )
 
         try:
