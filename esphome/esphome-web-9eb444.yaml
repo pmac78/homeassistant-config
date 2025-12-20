@@ -1,0 +1,401 @@
+esphome:
+  name: mb
+  friendly_name: "Kincony MB Power Monitor"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+i2c:
+  - id: bus_a
+    sda: 15
+    scl: 4
+    scan: true
+    frequency: 400kHz
+  - id: bus_b
+    sda: 5
+    scl: 16
+    scan: true
+    frequency: 400kHz
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO17_OUT
+  phy_addr: 0
+
+logger:
+
+api:
+
+ota:
+  - platform: esphome
+
+web_server:
+  port: 80
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+button:
+  - platform: restart
+    name: "Restart"
+
+sensor:
+  - platform: uptime
+    name: "Uptime"
+    entity_category: diagnostic
+
+  - platform: ina226
+    address: 0x40
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "QuinLED An1 Current"
+      id: current_1
+      device_class: current
+      state_class: measurement
+    power:
+      name: "QuinLED An1 Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "QuinLED An1 Voltage"
+      id: voltage_1
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x41
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "QuinLED An2 Current"
+      id: current_2
+      device_class: current
+      state_class: measurement
+    power:
+      name: "QuinLED An2 Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "QuinLED An2 Voltage"
+      id: voltage_2
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x42
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "B16 24v Current"
+      id: current_3
+      device_class: current
+      state_class: measurement
+    power:
+      name: "B16 24v Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "B16 24v Voltage"
+      id: voltage_3
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x43
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "USB Outlets Current"
+      id: current_4
+      device_class: current
+      state_class: measurement
+    power:
+      name: "USB Outlets Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "USB Outlets Voltage"
+      id: voltage_4
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x44
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Flood Lights Current"
+      id: current_5
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Flood Lights Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Flood Lights Voltage"
+      id: voltage_5
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x45
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Water Pump Current"
+      id: current_6
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Water Pump Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Water Pump Voltage"
+      id: voltage_6
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x46
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Mag Locks Current"
+      id: current_7
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Mag Locks Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Mag Locks Voltage"
+      id: voltage_7
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x47
+    i2c_id: bus_a
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Bed Lift Current"
+      id: current_8
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Bed Lift Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Bed Lift Voltage"
+      id: voltage_8
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x40
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Starlink Current"
+      id: current_9
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Starlink Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Starlink Voltage"
+      id: voltage_9
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x41
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Towel Rails Current"
+      id: current_10
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Towel Rails Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Towel Rails Voltage"
+      id: voltage_10
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x42
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "HWS DC Current"
+      id: current_11
+      device_class: current
+      state_class: measurement
+    power:
+      name: "HWS DC Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "HWS DC Voltage"
+      id: voltage_11
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x43
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Lights Fans Current"
+      id: current_12
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Lights Fans Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Lights Fans Voltage"
+      id: voltage_12
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x44
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Water Pump Ext Current"
+      id: current_13
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Water Pump Ext Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Water Pump Ext Voltage"
+      id: voltage_13
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x45
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Control Current"
+      id: current_14
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Control Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Control Voltage"
+      id: voltage_14
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x46
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Channel 15 Current"
+      id: current_15
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Channel 15 Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Channel 15 Voltage"
+      id: voltage_15
+      device_class: voltage
+      state_class: measurement
+
+  - platform: ina226
+    address: 0x47
+    i2c_id: bus_b
+    shunt_resistance: 0.01 ohm
+    max_current: 15A
+    update_interval: 5s
+    current:
+      name: "Channel 16 Current"
+      id: current_16
+      device_class: current
+      state_class: measurement
+    power:
+      name: "Channel 16 Power"
+      device_class: power
+      state_class: measurement
+    bus_voltage:
+      name: "Channel 16 Voltage"
+      id: voltage_16
+      device_class: voltage
+      state_class: measurement
+
+font:
+  - file: "gfonts://Roboto"
+    id: roboto
+    size: 20
+
+display:
+  - platform: ssd1306_i2c
+    i2c_id: bus_a
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.printf(0, 0, id(roboto), "Monitor");
+      it.printf(0, 20, id(roboto), "V1: %.1fV", id(voltage_1).state);
+      it.printf(0, 40, id(roboto), "A1: %.1fA", id(current_1).state);

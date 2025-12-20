@@ -1,0 +1,528 @@
+esphome:
+  name: b16m
+  friendly_name: B16M
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  variant: esp32s3
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+  hardware_uart: USB_SERIAL_JTAG
+
+# Enable Home Assistant API
+api:
+
+ota:
+  - platform: esphome
+
+ethernet:
+  type: W5500
+  clk_pin: GPIO42
+  mosi_pin: GPIO43
+  miso_pin: GPIO44
+  cs_pin: GPIO41
+  interrupt_pin: GPIO2
+  reset_pin: GPIO1
+
+i2c:
+  - id: bus_a
+    sda: 38
+    scl: 39
+    scan: true
+    frequency: 400kHz
+
+pcf8574:
+  - id: 'pcf8574_hub_out_1'
+    i2c_id: bus_a
+    address: 0x25
+    pcf8575: true
+
+  - id: 'pcf8574_hub_in_1'
+    i2c_id: bus_a
+    address: 0x24
+    pcf8575: true
+
+# ============================================
+# MOSFET OUTPUTS
+# ============================================
+switch:
+  # Output 01 - Flood Drivers (Redundant)
+  - platform: gpio
+    name: "Flood Drivers (Redundant)"
+    id: b16m_output01
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 0
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: true
+
+  # Output 02 - Flood Front (Redundant)
+  - platform: gpio
+    name: "Flood Front (Redundant)"
+    id: b16m_output02
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 1
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: true
+
+  # Output 03 - Flood Passenger (Redundant)
+  - platform: gpio
+    name: "Flood Passenger (Redundant)"
+    id: b16m_output03
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 2
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: true
+
+  # Output 04 - Flood Rear (Redundant)
+  - platform: gpio
+    name: "Flood Rear (Redundant)"
+    id: b16m_output04
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 3
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: true
+
+  # Output 05 - Grey Water Valve
+  - platform: gpio
+    name: "Grey Water Valve"
+    id: b16m_output05
+    icon: "mdi:pipe-valve"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 4
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 06 - Sensor Power 24v
+  - platform: gpio
+    name: "Sensor Power 24v"
+    id: b16m_output06
+    icon: "mdi:flash"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 5
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_ON
+
+  # Output 07 - Spare 24v a
+  - platform: gpio
+    name: "Spare 24v a"
+    id: b16m_output07
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 6
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 08 - Spare
+  - platform: gpio
+    name: "Spare Output 08"
+    id: b16m_output08
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 7
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: true
+
+  # Output 09 - Hatch Light
+  - platform: gpio
+    name: "Hatch Light"
+    id: b16m_output09
+    icon: "mdi:lightbulb"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 8
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 10 - Front Skylight
+  - platform: gpio
+    name: "Front Skylight"
+    id: b16m_output10
+    icon: "mdi:window-open"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 9
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 11 - Rear Skylight
+  - platform: gpio
+    name: "Rear Skylight"
+    id: b16m_output11
+    icon: "mdi:window-open"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 10
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 12 - Roof Hatch Fan
+  - platform: gpio
+    name: "Roof Hatch Fan"
+    id: b16m_output12
+    icon: "mdi:fan"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 11
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 13 - Ventilation Fridge
+  - platform: gpio
+    name: "Ventilation Fridge"
+    id: b16m_output13
+    icon: "mdi:fan"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 12
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 14 - Ventilation Couch
+  - platform: gpio
+    name: "Ventilation Couch"
+    id: b16m_output14
+    icon: "mdi:fan"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 13
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 15 - Reading Lights
+  - platform: gpio
+    name: "Reading Lights"
+    id: b16m_output15
+    icon: "mdi:book-open-page-variant"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 14
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  # Output 16 - Sensor Power 12v
+  - platform: gpio
+    name: "Sensor Power 12v"
+    id: b16m_output16
+    icon: "mdi:flash"
+    pin:
+      pcf8574: pcf8574_hub_out_1
+      number: 15
+      mode: OUTPUT
+      inverted: true
+    restore_mode: RESTORE_DEFAULT_ON
+
+# ============================================
+# DIGITAL INPUTS
+# ============================================
+binary_sensor:
+  - platform: gpio
+    name: "Input 01"
+    id: b16m_input01
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 0
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 02"
+    id: b16m_input02
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 1
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 03"
+    id: b16m_input03
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 2
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 04"
+    id: b16m_input04
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 3
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 05"
+    id: b16m_input05
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 4
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 06"
+    id: b16m_input06
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 5
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 07"
+    id: b16m_input07
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 6
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 08"
+    id: b16m_input08
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 7
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 09"
+    id: b16m_input09
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 8
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 10"
+    id: b16m_input10
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 9
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 11"
+    id: b16m_input11
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 10
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 12"
+    id: b16m_input12
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 11
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 13"
+    id: b16m_input13
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 12
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 14"
+    id: b16m_input14
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 13
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 15"
+    id: b16m_input15
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 14
+      mode: INPUT
+      inverted: true
+
+  - platform: gpio
+    name: "Input 16"
+    id: b16m_input16
+    pin:
+      pcf8574: pcf8574_hub_in_1
+      number: 15
+      mode: INPUT
+      inverted: true
+
+  # W1 header inputs (with pull-up on PCB)
+  - platform: gpio
+    name: "W1 IO40"
+    id: b16m_w1_io40
+    pin:
+      number: 40
+      inverted: true
+    disabled_by_default: true
+
+  - platform: gpio
+    name: "W1 IO15"
+    id: b16m_w1_io15
+    pin:
+      number: 15
+      inverted: true
+    disabled_by_default: true
+
+  - platform: gpio
+    name: "W1 IO48"
+    id: b16m_w1_io48
+    pin:
+      number: 48
+      inverted: true
+    disabled_by_default: true
+
+  - platform: gpio
+    name: "W1 IO47"
+    id: b16m_w1_io47
+    pin:
+      number: 47
+      inverted: true
+    disabled_by_default: true
+
+  # W1 header inputs (without pull-up on PCB)
+  - platform: gpio
+    name: "W1 IO13"
+    id: b16m_w1_io13
+    pin:
+      number: 13
+      mode:
+        input: true
+        pullup: true
+      inverted: false
+    disabled_by_default: true
+
+  - platform: gpio
+    name: "W1 IO14"
+    id: b16m_w1_io14
+    pin:
+      number: 14
+      mode:
+        input: true
+        pullup: true
+      inverted: false
+    disabled_by_default: true
+
+  - platform: gpio
+    name: "W1 IO21"
+    id: b16m_w1_io21
+    pin:
+      number: 21
+      mode:
+        input: true
+        pullup: true
+      inverted: false
+    disabled_by_default: true
+
+# ============================================
+# ADC SENSORS (ADS1115)
+# ============================================
+ads1115:
+  - address: 0x48
+    i2c_id: bus_a
+
+sensor:
+  - platform: ads1115
+    multiplexer: 'A0_GND'
+    gain: 6.144
+    resolution: 16_BITS
+    name: "ADC1"
+    id: b16m_adc1
+    update_interval: 5s
+    unit_of_measurement: "V"
+    accuracy_decimals: 3
+
+  - platform: ads1115
+    multiplexer: 'A1_GND'
+    gain: 6.144
+    resolution: 16_BITS
+    name: "ADC2"
+    id: b16m_adc2
+    update_interval: 5s
+    unit_of_measurement: "V"
+    accuracy_decimals: 3
+
+  - platform: ads1115
+    multiplexer: 'A2_GND'
+    gain: 6.144
+    resolution: 16_BITS
+    name: "ADC3"
+    id: b16m_adc3
+    update_interval: 5s
+    unit_of_measurement: "V"
+    accuracy_decimals: 3
+
+  - platform: ads1115
+    multiplexer: 'A3_GND'
+    gain: 6.144
+    resolution: 16_BITS
+    name: "ADC4"
+    id: b16m_adc4
+    update_interval: 5s
+    unit_of_measurement: "V"
+    accuracy_decimals: 3
+
+  - platform: uptime
+    name: "Uptime"
+    id: b16m_uptime
+
+# ============================================
+# DIAGNOSTICS
+# ============================================
+text_sensor:
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: true
+
+button:
+  - platform: restart
+    name: "Restart"
+    id: b16m_restart
+
+# ============================================
+# WEB SERVER
+# ============================================
+web_server:
+  port: 80
