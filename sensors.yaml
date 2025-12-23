@@ -69,18 +69,19 @@
 # Only integrates when actual flow is detected
 # ==========================================================
 - platform: integration
-  source: sensor.water_tanks_fill_rate_filtered
+  source: sensor.water_tanks_fill_rate
   name: "Water Tanks Filled Volume"
   unique_id: water_tanks_filled_volume
   round: 1
   method: trapezoidal
 
 - platform: integration
-  source: sensor.water_tanks_usage_rate_filtered
+  source: sensor.water_tanks_usage_rate
   name: "Water Tanks Used Volume"
   unique_id: water_tanks_used_volume
   round: 1
   method: trapezoidal
+
 # ==========================================================
 # DC CONSUMPTION ENERGY (kWh) - DC LOADS ONLY
 # Integrates DC consumption power to get total energy used
@@ -123,18 +124,17 @@
   unit_time: h
 
 # ==========================================================
-# 7-DAY AVERAGE TOTAL ENERGY USAGE
-# Calculates mean daily TOTAL consumption (DC + Inverter) over past week
+# 3-DAY AVERAGE TOTAL ENERGY USAGE
+# Calculates mean daily TOTAL consumption (DC + Inverter) over past 3 days
 # Used for battery autonomy and prediction calculations
-# UPDATED: Now uses total system consumption instead of DC only
 # ==========================================================
 - platform: statistics
-  name: "Total Energy Daily Usage Avg (7d)"
-  unique_id: total_energy_daily_usage_avg_7d
+  name: "Total Energy Daily Usage Avg (3d)"
+  unique_id: total_energy_daily_usage_avg_3d
   entity_id: sensor.total_system_consumption_energy
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 100
 
 # ==========================================================
@@ -153,12 +153,11 @@
   sampling_size: 200
 
 # ==========================================================
-# 24-HOUR LOAD PROFILE - 7-DAY MEAN PER HOUR
+# 24-HOUR LOAD PROFILE - 3-DAY MEAN PER HOUR
 # Creates statistical averages for each hour of the day
 # Enables accurate time-of-day load predictions
 # Each sensor calculates mean kWh used during that hour
-# over the past 7 days
-# UPDATED: Now uses TOTAL consumption (DC + Inverter)
+# over the past 3 days
 # ==========================================================
 - platform: statistics
   name: "Total Usage Hour 00 Mean"
@@ -166,7 +165,7 @@
   entity_id: sensor.total_usage_hour_00_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -175,7 +174,7 @@
   entity_id: sensor.total_usage_hour_01_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -184,7 +183,7 @@
   entity_id: sensor.total_usage_hour_02_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -193,7 +192,7 @@
   entity_id: sensor.total_usage_hour_03_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -202,7 +201,7 @@
   entity_id: sensor.total_usage_hour_04_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -211,7 +210,7 @@
   entity_id: sensor.total_usage_hour_05_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -220,7 +219,7 @@
   entity_id: sensor.total_usage_hour_06_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -229,7 +228,7 @@
   entity_id: sensor.total_usage_hour_07_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -238,7 +237,7 @@
   entity_id: sensor.total_usage_hour_08_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -247,7 +246,7 @@
   entity_id: sensor.total_usage_hour_09_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -256,7 +255,7 @@
   entity_id: sensor.total_usage_hour_10_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -265,7 +264,7 @@
   entity_id: sensor.total_usage_hour_11_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -274,7 +273,7 @@
   entity_id: sensor.total_usage_hour_12_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -283,7 +282,7 @@
   entity_id: sensor.total_usage_hour_13_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -292,7 +291,7 @@
   entity_id: sensor.total_usage_hour_14_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -301,7 +300,7 @@
   entity_id: sensor.total_usage_hour_15_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -310,7 +309,7 @@
   entity_id: sensor.total_usage_hour_16_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -319,7 +318,7 @@
   entity_id: sensor.total_usage_hour_17_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -328,7 +327,7 @@
   entity_id: sensor.total_usage_hour_18_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -337,7 +336,7 @@
   entity_id: sensor.total_usage_hour_19_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -346,7 +345,7 @@
   entity_id: sensor.total_usage_hour_20_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -355,7 +354,7 @@
   entity_id: sensor.total_usage_hour_21_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -364,7 +363,7 @@
   entity_id: sensor.total_usage_hour_22_raw
   state_characteristic: mean
   max_age:
-    days: 7
+    days: 3
   sampling_size: 500
 
 - platform: statistics
@@ -375,3 +374,136 @@
   max_age:
     days: 7
   sampling_size: 500
+
+# ==========================================================
+# KINCONY MB POWER MONITOR - ENERGY INTEGRATION
+# Converts MB power sensors (W) to energy (kWh)
+# These sensors will appear in the Energy Dashboard
+# ==========================================================
+- platform: integration
+  source: sensor.mb_quinled_an1_power
+  name: "Quinled AN1 Energy"
+  unique_id: mb_quinled_an1_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_quinled_an2_power
+  name: "Quinled AN2 Energy"
+  unique_id: mb_quinled_an2_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_b16_24v_power
+  name: "B16 24V Energy"
+  unique_id: mb_b16_24v_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_usb_outlets_power
+  name: "USB Outlets Energy"
+  unique_id: mb_usb_outlets_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_flood_lights_power
+  name: "Flood Lights Energy"
+  unique_id: mb_flood_lights_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_water_pump_power
+  name: "Water Pump Energy"
+  unique_id: mb_water_pump_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_mag_locks_power
+  name: "Mag Locks Energy"
+  unique_id: mb_mag_locks_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_bed_lift_power
+  name: "Bed Lift Energy"
+  unique_id: mb_bed_lift_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_starlink_power
+  name: "Starlink Energy"
+  unique_id: mb_starlink_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_towel_rails_power
+  name: "Towel Rails Energy"
+  unique_id: mb_towel_rails_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_hws_dc_power
+  name: "HWS DC Energy"
+  unique_id: mb_hws_dc_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_lights_fans_power
+  name: "Lights Fans Energy"
+  unique_id: mb_lights_fans_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_water_pump_ext_power
+  name: "Water Pump External Energy"
+  unique_id: mb_water_pump_ext_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_control_power
+  name: "Control Energy"
+  unique_id: mb_control_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_channel_15_power
+  name: "Channel 15 Energy"
+  unique_id: mb_channel_15_energy
+  unit_prefix: k
+  round: 3
+  method: left
+
+- platform: integration
+  source: sensor.mb_channel_16_power
+  name: "Channel 16 Energy"
+  unique_id: mb_channel_16_energy
+  unit_prefix: k
+  round: 3
+  method: left
