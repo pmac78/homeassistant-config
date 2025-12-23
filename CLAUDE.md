@@ -50,18 +50,17 @@ The system distinguishes between:
 
 ### Battery Prediction System
 Multiple prediction methods are implemented:
-1. **Simple method** - Uses 7-day average daily consumption
-2. **Forecast method** - Uses Solcast hourly solar forecasts
-3. **Profiled method** - Uses 24-hour load profile (hourly buckets averaged over 7 days)
+1. **Forecast method** - Uses Solcast hourly solar forecasts
+2. **Profiled method** - Uses 24-hour load profile (hourly buckets averaged over 3 days)
 
 Key prediction sensors:
-- `sensor.battery_predicted_eod_soc` / `sensor.battery_predicted_eod_soc_profiled`
+- `sensor.battery_predicted_end_of_day_soc_profiled`
 - `sensor.battery_soc_at_sunrise_profiled`
 - `sensor.battery_full_by_sunset_forecast`
 - `sensor.battery_autonomy_avg_load` / `sensor.battery_autonomy_current_load`
 
 ### 24-Hour Load Profile
-Template sensors capture hourly consumption buckets (`sensor.total_usage_hour_XX_raw`), which feed into statistics sensors (`sensor.total_usage_hour_XX_mean`) for 7-day averages per hour.
+Template sensors capture hourly consumption buckets (`sensor.total_usage_hour_XX_raw`), which feed into statistics sensors (`sensor.total_usage_hour_XX_mean`) for 3-day averages per hour.
 
 ### Water Tank Monitoring
 Two-tank system with:

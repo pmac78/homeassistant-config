@@ -1,0 +1,247 @@
+scene_day:
+  alias: Scene - Day
+  description: Daytime comfort - natural light prioritised, minimal artificial lighting
+  icon: mdi:weather-sunny
+  mode: single
+  sequence:
+  - action: switch.turn_on
+    target:
+      entity_id:
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_usb_outlets
+      - switch.b16m_ventilation_couch
+      - switch.b16m_roof_hatch_fan
+  - action: switch.turn_off
+    target:
+      entity_id:
+      - switch.f16_flood_rear
+      - switch.f16_flood_drivers
+      - switch.f16_flood_passenger
+      - switch.b16m_front_skylight
+      - switch.b16m_rear_skylight
+      - switch.b16m_hatch_light
+  - action: light.turn_on
+    target:
+      entity_id:
+      - light.wled_1_main
+      - light.wled_main_2
+    data:
+      brightness_pct: 100
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.ceiling
+      - light.dining
+      - light.rear_bed
+      - light.steps
+      - light.bathroom
+  - action: light.turn_on
+    target:
+      entity_id: light.kickboard
+    data:
+      brightness_pct: 30
+  - action: light.turn_on
+    target:
+      entity_id: light.cabinets
+    data:
+      brightness_pct: 50
+scene_evening:
+  alias: Scene - Evening
+  description: Evening ambiance - cozy warm lighting for relaxation
+  icon: mdi:weather-sunset
+  mode: single
+  sequence:
+  - action: switch.turn_on
+    target:
+      entity_id:
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_usb_outlets
+      - switch.b16m_ventilation_couch
+      - switch.b16m_roof_hatch_fan
+  - action: switch.turn_off
+    target:
+      entity_id:
+      - switch.f16_flood_rear
+      - switch.f16_flood_drivers
+      - switch.f16_flood_passenger
+      - switch.b16m_front_skylight
+      - switch.b16m_rear_skylight
+      - switch.b16m_hatch_light
+  - action: light.turn_on
+    target:
+      entity_id:
+      - light.wled_1_main
+      - light.wled_main_2
+    data:
+      brightness_pct: 100
+  - action: light.turn_on
+    target:
+      entity_id: light.ceiling
+    data:
+      brightness_pct: 40
+  - action: light.turn_on
+    target:
+      entity_id: light.dining
+    data:
+      brightness_pct: 70
+  - action: light.turn_on
+    target:
+      entity_id: light.kickboard
+    data:
+      brightness_pct: 30
+  - action: light.turn_on
+    target:
+      entity_id: light.cabinets
+    data:
+      brightness_pct: 70
+  - action: light.turn_on
+    target:
+      entity_id: light.bathroom
+    data:
+      brightness_pct: 50
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.rear_bed
+      - light.steps
+scene_sleep:
+  alias: Scene - Sleep
+  description: Sleep mode - minimal lighting for nighttime navigation only
+  icon: mdi:weather-night
+  mode: single
+  sequence:
+  - action: switch.turn_on
+    target:
+      entity_id:
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.b16m_ventilation_couch
+  - action: switch.turn_off
+    target:
+      entity_id:
+      - switch.f16_flood_rear
+      - switch.f16_flood_drivers
+      - switch.f16_flood_passenger
+      - switch.b16m_front_skylight
+      - switch.b16m_rear_skylight
+      - switch.b16m_hatch_light
+      - switch.b16m_roof_hatch_fan
+  - action: light.turn_on
+    target:
+      entity_id:
+      - light.wled_1_main
+      - light.wled_main_2
+    data:
+      brightness_pct: 100
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.ceiling
+      - light.dining
+      - light.cabinets
+      - light.bathroom
+      - light.rear_bed
+      - light.steps
+  - action: light.turn_on
+    target:
+      entity_id: light.kickboard
+    data:
+      brightness_pct: 1
+scene_travel:
+  alias: Scene - Travel
+  description: Driving mode - safe configuration for travel with essentials only
+  icon: mdi:truck
+  mode: single
+  sequence:
+  - action: switch.turn_on
+    target:
+      entity_id:
+      - switch.f16_starlink
+      - switch.f16_mag_locks
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_usb_outlets
+      - switch.b16m_sensor_power_12v
+      - switch.b16m_sensor_power_24v
+      - switch.b16m_ventilation_couch
+  - action: switch.turn_off
+    target:
+      entity_id:
+      - switch.f16_flood_rear
+      - switch.f16_flood_drivers
+      - switch.f16_flood_passenger
+      - switch.f16_awning
+      - switch.f16_hws
+      - switch.f16_towel_rails
+      - switch.f16_water_pump_internal
+      - switch.f16_water_pump_external
+      - switch.f16_bed_lift
+      - switch.b16m_roof_hatch_fan
+      - switch.b16m_ventilation_fridge
+      - switch.b16m_front_skylight
+      - switch.b16m_rear_skylight
+      - switch.b16m_hatch_light
+      - switch.b16m_grey_water_valve
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.ceiling
+      - light.dining
+      - light.kickboard
+      - light.cabinets
+      - light.bathroom
+      - light.rear_bed
+      - light.steps
+      - light.wled_1_main
+      - light.wled_main_2
+scene_max_power_saving:
+  alias: Scene - Max Power Saving
+  description: Maximum power conservation - only essential sensors and connectivity
+  icon: mdi:battery-alert-variant-outline
+  mode: single
+  sequence:
+  - action: switch.turn_on
+    target:
+      entity_id:
+      - switch.f16_starlink
+      - switch.b16m_sensor_power_12v
+      - switch.b16m_sensor_power_24v
+  - action: switch.turn_off
+    target:
+      entity_id:
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_quinled_dig
+      - switch.f16_usb_outlets
+      - switch.f16_flood_rear
+      - switch.f16_flood_drivers
+      - switch.f16_flood_passenger
+      - switch.f16_awning
+      - switch.f16_hws
+      - switch.f16_towel_rails
+      - switch.f16_water_pump_internal
+      - switch.f16_water_pump_external
+      - switch.f16_bed_lift
+      - switch.f16_mag_locks
+      - switch.b16m_roof_hatch_fan
+      - switch.b16m_ventilation_fridge
+      - switch.b16m_ventilation_couch
+      - switch.b16m_reading_lights
+      - switch.b16m_front_skylight
+      - switch.b16m_rear_skylight
+      - switch.b16m_hatch_light
+      - switch.b16m_grey_water_valve
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.ceiling
+      - light.dining
+      - light.kickboard
+      - light.cabinets
+      - light.bathroom
+      - light.rear_bed
+      - light.steps
+      - light.wled_1_main
+      - light.wled_main_2

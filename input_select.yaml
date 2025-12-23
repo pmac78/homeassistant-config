@@ -1,0 +1,8 @@
+camper_mode:
+  name: Camper Mode
+  options:
+    - At Camp
+    - Driving
+    - Away
+  initial: At Camp
+  icon: mdi:rv-truck

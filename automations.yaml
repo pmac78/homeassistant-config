@@ -1,8 +1,7 @@
 - id: hws_predictive_control
   alias: HWS - Predictive Solar Control
   description: Smart water heating - plans ahead for heating cycles
-  mode: restart
-  trigger:
+  triggers:
   - platform: time_pattern
     minutes: /5
   - platform: numeric_state
@@ -13,6 +12,95 @@
     entity_id: sensor.victron_mqtt_system_0_system_dc_pv_power
     above: 1200
     for: 00:02:00
+  conditions:
+  - condition: template
+    value_template: '{{ is_daytime }}'
+  - condition: template
+    value_template: '{{ hours_until_sunset > 2 }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ current_soc > 97 }}'
+      - condition: template
+        value_template: '{{ solar_remaining > 3 }}'
+      - condition: state
+        entity_id: switch.f16_hws
+        state: 'off'
+      sequence:
+      - target:
+          entity_id: switch.f16_hws
+        action: switch.turn_on
+    - conditions:
+      - condition: template
+        value_template: '{{ can_afford_heating }}'
+      - condition: template
+        value_template: '{{ energy_headroom > 1 }}'
+      - condition: template
+        value_template: '{{ current_soc > 75 }}'
+      - condition: template
+        value_template: '{{ current_solar > min_solar_for_eco }}'
+      - condition: template
+        value_template: '{{ solar_this_hour > 0.8 }}'
+      - condition: template
+        value_template: '{{ hours_until_sunset > 3 }}'
+      - condition: state
+        entity_id: switch.f16_hws
+        state: 'off'
+      sequence:
+      - target:
+          entity_id: switch.f16_hws
+        action: switch.turn_on
+    - conditions:
+      - condition: template
+        value_template: '{{ heating_score >= 60 }}'
+      - condition: template
+        value_template: '{{ current_soc > 85 }}'
+      - condition: template
+        value_template: '{{ current_surplus > 1100 }}'
+      - condition: state
+        entity_id: switch.f16_hws
+        state: 'off'
+      - condition: template
+        value_template: '{{ is_charging }}'
+      sequence:
+      - target:
+          entity_id: switch.f16_hws
+        action: switch.turn_on
+    - conditions:
+      - condition: state
+        entity_id: switch.f16_hws
+        state: 'on'
+      - condition: or
+        conditions:
+        - condition: template
+          value_template: '{{ current_solar > min_solar_for_eco * 0.8 }}'
+        - condition: template
+          value_template: '{{ current_soc > 85 and can_afford_heating }}'
+      - condition: template
+        value_template: '{{ current_soc > 70 }}'
+      sequence:
+      - delay: 00:00:01
+    - conditions:
+      - condition: state
+        entity_id: switch.f16_hws
+        state: 'on'
+      - condition: or
+        conditions:
+        - condition: template
+          value_template: '{{ current_solar < min_solar_for_eco * 0.6 }}'
+        - condition: template
+          value_template: '{{ current_soc < 70 }}'
+        - condition: template
+          value_template: '{{ not can_afford_heating and current_soc < 90 }}'
+        - condition: template
+          value_template: '{{ hours_until_sunset < 1.5 }}'
+      sequence:
+      - target:
+          entity_id: switch.f16_hws
+        action: switch.turn_off
+    default: []
+  mode: restart
   variables:
     current_soc: '{{ states(''sensor.victron_mqtt_system_0_system_dc_battery_soc'')
       | float(0) }}'
@@ -42,134 +130,417 @@
     is_charging: '{{ battery_power > 0 }}'
     heating_score: '{{ states(''sensor.hws_heating_score'') | int(0) }}'
     is_daytime: '{% set now_hour = now().hour %} {{ now_hour >= 7 and now_hour <=
-      17 }}
-
-      '
+      17 }}'
     hours_until_sunset: "{% set sunset = state_attr('sun.sun', 'next_setting') %}
       {% if sunset %}\n  {{ ((sunset - now()).total_seconds() / 3600) | round(1) }}\n{%
-      else %}\n  8\n{% endif %}\n"
+      else %}\n  8\n{% endif %}"
     min_solar_for_eco: 900
-  condition:
-  - condition: template
-    value_template: '{{ is_daytime }}'
-  - condition: template
-    value_template: '{{ hours_until_sunset > 2 }}'
-  action:
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ current_soc > 97 }}'
-      - condition: template
-        value_template: '{{ solar_remaining > 3 }}'
-      - condition: state
-        entity_id: switch.hws
-        state: 'off'
-      sequence:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.hws
-    - conditions:
-      - condition: template
-        value_template: '{{ can_afford_heating }}'
-      - condition: template
-        value_template: '{{ energy_headroom > 1 }}'
-      - condition: template
-        value_template: '{{ current_soc > 75 }}'
-      - condition: template
-        value_template: '{{ current_solar > min_solar_for_eco }}'
-      - condition: template
-        value_template: '{{ solar_this_hour > 0.8 }}'
-      - condition: template
-        value_template: '{{ hours_until_sunset > 3 }}'
-      - condition: state
-        entity_id: switch.hws
-        state: 'off'
-      sequence:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.hws
-    - conditions:
-      - condition: template
-        value_template: '{{ heating_score >= 60 }}'
-      - condition: template
-        value_template: '{{ current_soc > 85 }}'
-      - condition: template
-        value_template: '{{ current_surplus > 1100 }}'
-      - condition: state
-        entity_id: switch.hws
-        state: 'off'
-      - condition: template
-        value_template: '{{ is_charging }}'
-      sequence:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.hws
-    - conditions:
-      - condition: state
-        entity_id: switch.hws
-        state: 'on'
-      - condition: or
-        conditions:
-        - condition: template
-          value_template: '{{ current_solar > min_solar_for_eco * 0.8 }}'
-        - condition: template
-          value_template: '{{ current_soc > 85 and can_afford_heating }}'
-      - condition: template
-        value_template: '{{ current_soc > 70 }}'
-      sequence:
-      - delay: 00:00:01
-    - conditions:
-      - condition: state
-        entity_id: switch.hws
-        state: 'on'
-      - condition: or
-        conditions:
-        - condition: template
-          value_template: '{{ current_solar < min_solar_for_eco * 0.6 }}'
-        - condition: template
-          value_template: '{{ current_soc < 70 }}'
-        - condition: template
-          value_template: '{{ not can_afford_heating and current_soc < 90 }}'
-        - condition: template
-          value_template: '{{ hours_until_sunset < 1.5 }}'
-      sequence:
-      - service: switch.turn_off
-        target:
-          entity_id: switch.hws
-    default: []
 - id: hws_sunset_safety
   alias: HWS - Sunset Safety Stop
-  trigger:
+  triggers:
   - platform: sun
     event: sunset
     offset: -01:30:00
-  condition:
+  conditions:
   - condition: state
-    entity_id: switch.hws
+    entity_id: switch.f16_hws
     state: 'on'
-  action:
-  - service: switch.turn_off
-    target:
-      entity_id: switch.hws
-- id: '1756966157065'
-  alias: Switch 1_1 - Toggle Maglocks
-  description: ''
+  actions:
+  - target:
+      entity_id: switch.f16_hws
+    action: switch.turn_off
+- id: switch_1_1_long_bed_lift
+  alias: Switch 1_1 Long - Bed Lift Timer
+  description: Long press button 1 on Switch 1 to activate Bed Lift for 3 minutes
   triggers:
   - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_long_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - target:
+      entity_id: switch.f16_bed_lift
+    action: switch.turn_on
+  - delay:
+      minutes: 3
+  - target:
+      entity_id: switch.f16_bed_lift
+    action: switch.turn_off
+  mode: restart
+- id: switch_1_3_arrive_camp
+  alias: Switch 1_3 - Arrive at Camp
+  description: Short press button 3 to enable all camp services and lighting
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_3
+    trigger: device
+  conditions: []
+  actions:
+  - target:
+      entity_id: input_select.camper_mode
+    data:
+      option: At Camp
+    action: input_select.select_option
+  - target:
+      entity_id: switch.f16_mag_locks
+    action: switch.turn_off
+  - target:
+      entity_id:
+      - switch.f16_hws
+      - switch.f16_starlink
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_towel_rails
+      - switch.f16_usb_outlets
+      - switch.f16_water_pump_internal
+    action: switch.turn_on
+  - target:
+      entity_id:
+      - switch.b16m_roof_hatch_fan
+      - switch.b16m_ventilation_couch
+      - switch.b16m_ventilation_fridge
+      - switch.b16m_sensor_power_12v
+      - switch.b16m_sensor_power_24v
+    action: switch.turn_on
+  - target:
+      entity_id:
+      - switch.shellypro4pm_6825ddd5de40_switch_3
+      - switch.shellypro4pm_8813bff257a4_switch_1
+      - switch.shellypro4pm_8813bff257a4_switch_3
+      - switch.shellypro4pm_8813bff257a4_switch_0
+    action: switch.turn_on
+  - target:
+      entity_id: switch.shellypro4pm_6825ddd5de40_switch_2
+    action: switch.turn_off
+  - choose:
+    - conditions:
+      - condition: sun
+        after: sunset
+      sequence:
+      - target:
+          entity_id:
+          - light.kickboard
+          - light.dining
+          - light.ceiling
+        data:
+          brightness_pct: 75
+        action: light.turn_on
+    default:
+    - target:
+        entity_id:
+        - light.kickboard
+        - light.dining
+        - light.ceiling
+      data:
+        brightness_pct: 50
+      action: light.turn_on
+  mode: single
+- id: switch_1_3_long_prepare_drive
+  alias: Switch 1_3 Long - Prepare to Drive
+  description: Long press button 3 to disable non-essential services for travel
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_long_press
+    subtype: button_3
+    trigger: device
+  conditions: []
+  actions:
+  - target:
+      entity_id: input_select.camper_mode
+    data:
+      option: Driving
+    action: input_select.select_option
+  - target:
+      entity_id: switch.f16_mag_locks
+    action: switch.turn_on
+  - target:
+      entity_id:
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_towel_rails
+      - switch.f16_water_pump_internal
+      - switch.b16m_roof_hatch_fan
+    action: switch.turn_off
+  - target:
+      entity_id:
+      - switch.f16_starlink
+      - switch.f16_usb_outlets
+      - switch.b16m_sensor_power_12v
+      - switch.b16m_sensor_power_24v
+      - switch.b16m_ventilation_couch
+      - switch.b16m_ventilation_fridge
+      - switch.shellypro4pm_8813bff257a4_switch_3
+    action: switch.turn_on
+  - target:
+      entity_id:
+      - switch.shellypro4pm_6825ddd5de40_switch_3
+      - switch.shellypro4pm_6825ddd5de40_switch_2
+      - switch.shellypro4pm_8813bff257a4_switch_1
+      - switch.shellypro4pm_8813bff257a4_switch_0
+    action: switch.turn_off
+  - target:
+      entity_id:
+      - light.dining
+      - light.cabinets
+      - light.kickboard
+      - light.ceiling
+      - light.bathroom
+      - light.rear_bed
+      - light.steps
+    action: light.turn_off
+  mode: single
+- id: grey_water_valve_auto_off
+  alias: Grey Water Valve - Auto Off Timer
+  description: Automatically turn off grey water valve after 5 minutes
+  triggers:
+  - platform: state
+    entity_id: switch.b16m_grey_water_valve
+    to: 'on'
+  conditions: []
+  actions:
+  - delay:
+      minutes: 5
+  - action: switch.turn_off
+    target:
+      entity_id: switch.b16m_grey_water_valve
+  mode: restart
+- id: scene_auto_morning
+  alias: Scene - Morning (Sunrise)
+  description: Staged morning lighting at sunrise when At Camp
+  triggers:
+  - platform: sun
+    event: sunrise
+    trigger: sun
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: At Camp
+  actions:
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.wled_1_main
+      - light.wled_main_2
+    data:
+      brightness_pct: 100
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.ceiling
+      - light.dining
+      - light.rear_bed
+      - light.steps
+  - service: light.turn_on
+    target:
+      entity_id: light.kickboard
+    data:
+      brightness_pct: 20
+      transition: 600
+  - delay:
+      minutes: 10
+  - service: light.turn_on
+    target:
+      entity_id:
+      - light.bathroom
+      - light.cabinets
+    data:
+      brightness_pct: 30
+      transition: 60
+  mode: single
+- id: scene_auto_day
+  alias: Scene - Day (9am)
+  description: Activate day lighting at 9am when At Camp
+  triggers:
+  - platform: time
+    at: 09:00:00
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: At Camp
+  actions:
+  - service: script.scene_day
+  mode: single
+- id: scene_auto_evening
+  alias: Scene - Evening (Sunset)
+  description: Activate evening lighting at sunset when At Camp
+  triggers:
+  - platform: sun
+    event: sunset
+    trigger: sun
+  conditions:
+  - condition: state
+    entity_id: input_select.camper_mode
+    state: At Camp
+  actions:
+  - service: script.scene_evening
+  mode: single
+- id: switch_4_2_cycle_rear_bed
+  alias: Switch 4_2 - Cycle Rear Bed Brightness
+  description: 'Cycle rear bed light: Off → 5% → 40% → 100% → Off'
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.rear_bed
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.rear_bed
+        data:
+          brightness_pct: 5
+    - conditions:
+      - condition: state
+        entity_id: light.rear_bed
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.rear_bed
+        attribute: brightness
+        below: 21
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.rear_bed
+        data:
+          brightness_pct: 40
+    - conditions:
+      - condition: state
+        entity_id: light.rear_bed
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.rear_bed
+        attribute: brightness
+        above: 20
+        below: 131
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.rear_bed
+        data:
+          brightness_pct: 100
+    - conditions:
+      - condition: state
+        entity_id: light.rear_bed
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.rear_bed
+        attribute: brightness
+        above: 130
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id: light.rear_bed
+  mode: single
+- id: switch_4_1_cycle_bathroom
+  alias: Switch 4_1 - Cycle Bathroom Brightness
+  description: 'Cycle bathroom light: Off → 5% → 40% → 100% → Off'
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
     domain: zha
     type: remote_button_short_press
     subtype: button_1
     trigger: device
   conditions: []
   actions:
-  - type: toggle
-    device_id: 7603f297b0a3a73e9808648640f06b64
-    entity_id: 249de4b849a8dce4f7194e0a8ae2c741
-    domain: switch
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.bathroom
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.bathroom
+        data:
+          brightness_pct: 5
+    - conditions:
+      - condition: state
+        entity_id: light.bathroom
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.bathroom
+        attribute: brightness
+        below: 21
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.bathroom
+        data:
+          brightness_pct: 40
+    - conditions:
+      - condition: state
+        entity_id: light.bathroom
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.bathroom
+        attribute: brightness
+        above: 20
+        below: 131
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.bathroom
+        data:
+          brightness_pct: 100
+    - conditions:
+      - condition: state
+        entity_id: light.bathroom
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.bathroom
+        attribute: brightness
+        above: 130
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id: light.bathroom
+  mode: single
+- id: switch_4_1_double_bathroom_off
+  alias: Switch 4_1 Double - Bathroom Off
+  description: Double press button 1 to turn off bathroom light
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - service: light.turn_off
+    target:
+      entity_id: light.bathroom
+  mode: single
+- id: switch_4_2_double_rear_bed_off
+  alias: Switch 4_2 Double - Rear Bed Off
+  description: Double press button 2 to turn off rear bed light
+  triggers:
+  - device_id: 9fe3098ad9d55efaf1171d5dc780c79b
+    domain: zha
+    type: remote_button_double_press
+    subtype: button_2
+    trigger: device
+  conditions: []
+  actions:
+  - service: light.turn_off
+    target:
+      entity_id: light.rear_bed
   mode: single
 - id: '1763275768553'
-  alias: Switch 2_1 -  Toggle Flood Passenger
-  description: ''
+  alias: Switch 2_1 - Toggle Flood Passenger
+  description: Short press button 1 on Switch 2 to toggle passenger flood light
   triggers:
   - device_id: 353178ba46eeae1368139fda0f53ef9b
     domain: zha
@@ -178,14 +549,13 @@
     trigger: device
   conditions: []
   actions:
-  - type: toggle
-    device_id: 7603f297b0a3a73e9808648640f06b64
-    entity_id: fc523df94c326a14d1190a719f8def4a
-    domain: switch
+  - target:
+      entity_id: switch.f16_flood_passenger
+    action: switch.toggle
   mode: single
 - id: '1763275814961'
-  alias: Switch 2_2 -  Toggle Flood Rear
-  description: ''
+  alias: Switch 2_2 - Toggle Flood Rear
+  description: Short press button 2 on Switch 2 to toggle rear flood light
   triggers:
   - device_id: 353178ba46eeae1368139fda0f53ef9b
     domain: zha
@@ -194,14 +564,13 @@
     trigger: device
   conditions: []
   actions:
-  - type: toggle
-    device_id: 7603f297b0a3a73e9808648640f06b64
-    entity_id: 19220a5e8ef32d3361e2ee59bcca7ac5
-    domain: switch
+  - target:
+      entity_id: switch.f16_flood_rear
+    action: switch.toggle
   mode: single
 - id: '1763275840429'
   alias: Switch 2_3 - Toggle Flood Drivers
-  description: ''
+  description: Short press button 3 on Switch 2 to toggle drivers flood light
   triggers:
   - device_id: 353178ba46eeae1368139fda0f53ef9b
     domain: zha
@@ -210,14 +579,13 @@
     trigger: device
   conditions: []
   actions:
-  - type: toggle
-    device_id: 7603f297b0a3a73e9808648640f06b64
-    entity_id: 88b22423ce347dbdddb9f736d9095b71
-    domain: switch
+  - target:
+      entity_id: switch.f16_flood_drivers
+    action: switch.toggle
   mode: single
 - id: '1763276161137'
   alias: Switch 2_1_Long - All Floods On
-  description: ''
+  description: Double press button 1 on Switch 2 to turn on all flood lights
   triggers:
   - device_id: 353178ba46eeae1368139fda0f53ef9b
     domain: zha
@@ -226,19 +594,12 @@
     trigger: device
   conditions: []
   actions:
-  - parallel:
-    - type: turn_on
-      device_id: 7603f297b0a3a73e9808648640f06b64
-      entity_id: fc523df94c326a14d1190a719f8def4a
-      domain: switch
-    - type: turn_on
-      device_id: 7603f297b0a3a73e9808648640f06b64
-      entity_id: 88b22423ce347dbdddb9f736d9095b71
-      domain: switch
-    - type: turn_on
-      device_id: 7603f297b0a3a73e9808648640f06b64
-      entity_id: 19220a5e8ef32d3361e2ee59bcca7ac5
-      domain: switch
+  - target:
+      entity_id:
+      - switch.f16_flood_passenger
+      - switch.f16_flood_drivers
+      - switch.f16_flood_rear
+    action: switch.turn_on
   mode: single
 - id: '1763552078880'
   alias: Toggle Dining Light
@@ -273,6 +634,37 @@
     target:
       entity_id: scene.nightlight
   mode: single
+- id: steps_light_on_door_open
+  alias: Steps Light - Door Open at Night
+  description: Turn Steps WLED to full brightness when main door opens after dark
+  mode: restart
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.main_door_sensor_opening
+    to: 'on'
+  condition:
+  - condition: or
+    conditions:
+    - condition: sun
+      after: sunset
+    - condition: sun
+      before: sunrise
+  action:
+  - service: scene.create
+    data:
+      scene_id: steps_before_door
+      snapshot_entities:
+      - light.steps
+  - service: light.turn_on
+    target:
+      entity_id: light.steps
+    data:
+      brightness: 255
+  - delay:
+      minutes: 2
+  - service: scene.turn_on
+    target:
+      entity_id: scene.steps_before_door
 - id: '1763552509172'
   alias: Trigger Bright Lights
   description: ''
@@ -298,48 +690,106 @@
   - platform: homeassistant
     event: start
   actions:
-  - target:
+  - action: switch.turn_on
+    target:
       entity_id:
-      - switch.starlink
-    action: switch.turn_on
-  - target:
+      - switch.f16_starlink
+      - switch.f16_quinled_an1
+      - switch.f16_quinled_an2
+      - switch.f16_usb_outlets
+      - switch.b16m_sensor_power_12v
+      - switch.b16m_sensor_power_24v
+      - switch.b16m_ventilation_couch
+      - switch.b16m_reading_lights
+      - switch.b16m_roof_hatch_fan
+  - action: switch.turn_off
+    target:
       entity_id:
-      - switch.f16_output16
-      - switch.flood_passenger
-      - switch.flood_drivers
-      - switch.flood_rear
-      - switch.awning
-      - switch.hws
-      - switch.towel_rails
-      - switch.water_pump_external
-      - switch.mag_locks
-      - switch.bed_lift
-      - switch.water_pump_internal
-      - switch.quinled_dig
-      - switch.usb_outlets
-      - switch.quinled_an2
-      - switch.quinled_an1
-    action: switch.turn_off
-  - target:
-      entity_id:
-      - switch.b16m_output16
-      - switch.b16m_output14
-      - switch.toilet
-      - switch.b16m_output06
-    action: switch.turn_on
-  - target:
-      entity_id:
-      - switch.b16m_output15
-      - switch.b16m_output13
-      - switch.b16m_output12
-      - switch.b16m_output11
-      - switch.b16m_output10
-      - switch.b16m_output09
-      - switch.b16m_output07
-      - switch.b16m_output05
-      - switch.b16m_flood_rear_redundant
-      - switch.b16m_flood_front_redundant
-      - switch.b16m_flood_passenger_redundant
-      - switch.b16m_flood_drivers_redundant
-    action: switch.turn_off
+      - switch.f16_f16_output_16
+      - switch.f16_flood_passenger
+      - switch.f16_flood_drivers
+      - switch.f16_flood_rear
+      - switch.f16_awning
+      - switch.f16_hws
+      - switch.f16_towel_rails
+      - switch.f16_water_pump_external
+      - switch.f16_water_pump_internal
+      - switch.f16_mag_locks
+      - switch.f16_bed_lift
+      - switch.f16_quinled_dig
+      - switch.b16m_ventilation_fridge
+      - switch.b16m_rear_skylight
+      - switch.b16m_front_skylight
+      - switch.b16m_hatch_light
+      - switch.b16m_spare_24v_a
+      - switch.b16m_grey_water_valve
+  mode: single
+- id: '1766322659861'
+  alias: Toggle Mag Locks
+  description: ''
+  triggers:
+  - device_id: afb4ceb1f6b3a9031a2a3707bb1901e0
+    domain: zha
+    type: remote_button_short_press
+    subtype: button_1
+    trigger: device
+  conditions: []
+  actions:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.f16_mag_locks
+  mode: single
+- id: towel_rails_schedule
+  alias: Towel Rails - Evening Schedule
+  description: Turn on towel rails at 6pm, off at 2am for evening comfort
+  triggers:
+  - platform: time
+    at: '18:00:00'
+  - platform: time
+    at: 02:00:00
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: time
+        after: '18:00:00'
+        before: '23:59:59'
+      sequence:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.f16_towel_rails
+    - conditions:
+      - condition: time
+        after: 00:00:00
+        before: 02:00:01
+      sequence:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.f16_towel_rails
+  mode: single
+- id: ventilation_fridge_schedule
+  alias: Ventilation Fridge - Daytime Schedule
+  description: Turn on fridge ventilation at 10am, off at 6pm during warm hours
+  triggers:
+  - platform: time
+    at: '10:00:00'
+  - platform: time
+    at: '18:00:00'
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: time
+        after: '10:00:00'
+        before: '18:00:00'
+      sequence:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.b16m_ventilation_fridge
+    default:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.b16m_ventilation_fridge
   mode: single
