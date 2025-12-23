@@ -25,4 +25,17 @@ timer: !include timer.yaml
 template: !include templates.yaml
 sensor: !include sensors.yaml
 utility_meter: !include utility_meter.yaml
+
 mqtt: !include mqtt_dvcc.yaml
+
+template:
+  - trigger:
+      - trigger: event
+        event_type: bubble_card_update_modules
+    sensor:
+      - name: "Bubble Card Modules"
+        state: "saved"
+        icon: "mdi:puzzle"
+        attributes:
+          modules: "{{ trigger.event.data.modules }}"
+          last_updated: "{{ trigger.event.data.last_updated }}"
